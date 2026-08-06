@@ -32,6 +32,7 @@ real: código completo, testado e funcional.
 
 ```text
 landing-pages-portfolio/
+├── .github/workflows/deploy-pages.yml   publicação automática no GitHub Pages
 ├── astro.config.mjs
 ├── package.json
 ├── tsconfig.json
@@ -72,8 +73,15 @@ navegador — não depende do Astro nem de instalação de pacotes.
 
 ## Publicação
 
-Veja [docs/deploy.md](docs/deploy.md) para instruções detalhadas de Vercel,
-Netlify e GitHub Pages (incluindo o `BASE_PATH` necessário para subdiretório).
+**GitHub Pages (automático)**: push para `main` dispara
+`.github/workflows/deploy-pages.yml`, que builda e publica o site em
+**https://geannyr.github.io/landing-pages-portfolio/**. Precisa apenas que
+**Settings → Pages → Source** esteja definido como **GitHub Actions** (feito uma
+única vez, manualmente — o workflow não habilita isso sozinho). Acompanhe cada
+execução na aba **Actions** do repositório.
+
+Veja [docs/deploy.md](docs/deploy.md) para o passo a passo completo e para
+instruções de Vercel e Netlify (que não usam este workflow, específico do Pages).
 
 ## Adicionando um projeto
 

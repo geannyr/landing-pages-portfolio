@@ -47,32 +47,41 @@ Não defina `BASE_PATH` pelo mesmo motivo da Vercel (domínio/subdomínio Netlif
 raiz). Se um dia o site for publicado num subcaminho do Netlify, defina `BASE_PATH`
 nas variáveis de ambiente do painel do Netlify antes do build.
 
-## GitHub Pages (publicação manual)
+## GitHub Pages (publicação automática via GitHub Actions)
 
-Nenhum workflow de GitHub Actions foi criado nesta etapa — a publicação abaixo é
-manual, para você decidir depois se quer automatizar.
+O repositório já inclui `.github/workflows/deploy-pages.yml`, usando o fluxo
+oficial recomendado atualmente para sites estáticos no GitHub Pages
+(`actions/configure-pages` + `actions/upload-pages-artifact` +
+`actions/deploy-pages` — sem branch `gh-pages`, sem `peaceiris/actions-gh-pages`).
 
-1. Build com o base path do repositório:
-   ```bash
-   BASE_PATH=/landing-pages-portfolio/ SITE_URL=https://SEU-USUARIO.github.io npm run build
-   ```
-   (troque `SEU-USUARIO` pelo seu usuário do GitHub e `landing-pages-portfolio` pelo
-   nome real do repositório, se for diferente)
-2. O resultado publicável é a pasta `dist/` inteira (já contém `dist/saude/`).
-3. Publique `dist/` como conteúdo do GitHub Pages, por uma das duas formas:
-   - **Branch `gh-pages`**: crie/atualize esse branch só com o conteúdo de `dist/`
-     (por exemplo com uma ferramenta como `gh-pages` ou publicando manualmente) e
-     configure o Pages do repositório para servir a partir dele.
-   - **Settings → Pages → "Deploy from a branch"**: aponte para o branch e pasta
-     onde `dist/` foi publicado.
-4. Confirme em Settings → Pages que a URL final é
-   `https://SEU-USUARIO.github.io/landing-pages-portfolio/` e que ela bate com o
-   `BASE_PATH`/`SITE_URL` usados no build do passo 1 — um valor errado quebra todos
-   os links internos.
+**O workflow não publica nada sozinho até você habilitar o Pages no repositório.**
+Passo a passo:
 
-Se no futuro você quiser automatizar esse processo, o próximo passo natural é um
-workflow do GitHub Actions (`npm ci && npm run build` com `BASE_PATH` fixo, seguido
-de `actions/deploy-pages`) — deliberadamente não criado agora, a seu pedido.
+1. No GitHub, abra **Settings → Pages** do repositório
+   [landing-pages-portfolio](https://github.com/geannyr/landing-pages-portfolio).
+2. Em **Build and deployment → Source**, selecione **GitHub Actions** (não
+   "Deploy from a branch").
+3. Dê `git push` para a branch `main` (ou rode o workflow manualmente em
+   **Actions → Deploy to GitHub Pages → Run workflow**, via `workflow_dispatch`).
+4. Acompanhe a execução na aba **Actions** — o job `build` roda `npm ci`,
+   `npm run check`, `npm run build` (já com `BASE_PATH` e `SITE_URL` corretos) e
+   envia `dist/` como artefato; o job `deploy` publica esse artefato no Pages.
+5. Ao concluir, o site fica em
+   **https://geannyr.github.io/landing-pages-portfolio/**.
+
+O workflow roda em push para `main` e também aceita disparo manual
+(`workflow_dispatch`). Permissões ficam restritas ao mínimo necessário
+(`contents: read`, `pages: write`, `id-token: write`) e uma `concurrency` garante
+que dois deploys não rodem ao mesmo tempo.
+
+Se preferir publicar manualmente em vez de usar o workflow, o processo é:
+
+```bash
+BASE_PATH=/landing-pages-portfolio/ SITE_URL=https://geannyr.github.io npm run build
+```
+
+e então publicar o conteúdo de `dist/` por conta própria — mas com o workflow já
+configurado, isso normalmente não é necessário.
 
 ## Windows / Git Bash: cuidado com `BASE_PATH`
 
