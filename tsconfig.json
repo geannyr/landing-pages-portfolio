@@ -1,0 +1,8 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*", "scripts/**/*"],
+  "exclude": ["dist", "saude", "saas", "consultoria", "educacao"],
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}

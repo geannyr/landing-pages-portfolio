@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Domínio próprio do Netlify fica na raiz, então BASE_PATH não precisa ser definido
+# (o padrão em astro.config.mjs já é "/"). Veja docs/deploy.md para detalhes.

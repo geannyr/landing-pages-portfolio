@@ -1,0 +1,67 @@
+---
+const criteria = [
+  { title: "Responsividade", text: "Testado de 320px a telas grandes, sem overflow." },
+  { title: "Acessibilidade", text: "Semântica, teclado, contraste AA e estados claros." },
+  { title: "SEO", text: "Metadados, URLs semânticas e sitemap por página." },
+  { title: "Performance", text: "Geração estática e JavaScript mínimo." },
+  { title: "Código organizado", text: "Componentes pequenos e dados centralizados." },
+  { title: "Experiência de conversão", text: "Hierarquia clara e ações explícitas." }
+];
+---
+
+<section class="section" id="qualidade" aria-labelledby="qualidade-title">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Critérios de qualidade</p>
+      <h2 id="qualidade-title">Padrões que valem para todos os projetos.</h2>
+    </div>
+
+    <div class="quality-grid">
+      {
+        criteria.map((item) => (
+          <div class="quality-item">
+            <strong>{item.title}</strong>
+            <p>{item.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .quality-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .quality-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    border-top: 2px solid var(--color-accent);
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-5);
+  }
+
+  .quality-item strong {
+    color: var(--color-text);
+  }
+
+  .quality-item p {
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 640px) {
+    .quality-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .quality-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

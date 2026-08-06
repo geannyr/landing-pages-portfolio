@@ -1,0 +1,186 @@
+---
+import { withBase } from "../utils/url";
+
+const projectsAnchor = `${withBase("")}#projetos`;
+---
+
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__content">
+      <p class="eyebrow">Portfólio de front-end</p>
+      <h1 id="hero-title">Landing pages criadas para converter, comunicar e performar.</h1>
+      <p class="hero__lead">
+        Uma coleção de experiências digitais desenvolvidas com diferentes stacks, segmentos e objetivos, com atenção a
+        design, acessibilidade e qualidade técnica.
+      </p>
+      <div class="hero__actions">
+        <a class="button" href={projectsAnchor}>Explorar projetos</a>
+        <a class="button button--secondary" data-contact="github" aria-disabled="true">Ver código no GitHub</a>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <div class="hero__panel hero__panel--back bg-grid"></div>
+      <div class="hero__panel hero__panel--front">
+        <div class="hero__panel-bar">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="hero__panel-block hero__panel-block--wide"></div>
+        <div class="hero__panel-row">
+          <div class="hero__panel-block"></div>
+          <div class="hero__panel-block"></div>
+        </div>
+        <div class="hero__panel-block hero__panel-block--accent"></div>
+      </div>
+      <div class="hero__chip hero__chip--one">Acessível</div>
+      <div class="hero__chip hero__chip--two">Performático</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    overflow: hidden;
+    padding-top: var(--space-8);
+    position: relative;
+  }
+
+  .hero__glow {
+    background: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22), transparent 55%),
+      radial-gradient(circle at 85% 0%, rgba(96, 165, 250, 0.14), transparent 50%);
+    inset: 0;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--space-8);
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__content {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .hero__lead {
+    color: var(--color-muted-strong);
+    font-size: 1.1rem;
+    max-width: 56ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero__actions .button {
+    width: 100%;
+  }
+
+  .hero__visual {
+    min-height: 20rem;
+    position: relative;
+  }
+
+  .hero__panel {
+    border-radius: var(--radius-lg);
+    position: absolute;
+  }
+
+  .hero__panel--back {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    inset: 1.5rem 0 0 1.5rem;
+    opacity: 0.6;
+  }
+
+  .hero__panel--front {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-strong);
+    box-shadow: var(--shadow-raised);
+    display: grid;
+    gap: var(--space-4);
+    inset: 0 1.5rem 1.5rem 0;
+    padding: var(--space-6);
+  }
+
+  .hero__panel-bar {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .hero__panel-bar span {
+    background: var(--color-border-strong);
+    border-radius: 999px;
+    height: 0.6rem;
+    width: 0.6rem;
+  }
+
+  .hero__panel-block {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    height: 3rem;
+  }
+
+  .hero__panel-block--wide {
+    height: 6.5rem;
+  }
+
+  .hero__panel-row {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero__panel-block--accent {
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
+    border: 0;
+    height: 2.5rem;
+    width: 45%;
+  }
+
+  .hero__chip {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    box-shadow: var(--shadow-card);
+    color: var(--color-muted-strong);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    position: absolute;
+  }
+
+  .hero__chip--one {
+    left: -0.5rem;
+    top: 2.5rem;
+  }
+
+  .hero__chip--two {
+    bottom: 0.5rem;
+    right: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero__actions .button {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      padding-top: var(--space-9);
+    }
+
+    .hero__grid {
+      align-items: center;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+</style>

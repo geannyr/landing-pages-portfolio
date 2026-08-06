@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import CategorySection from "../components/CategorySection.astro";
+import ProcessSection from "../components/ProcessSection.astro";
+import QualitySection from "../components/QualitySection.astro";
+import ContactSection from "../components/ContactSection.astro";
+import { getProjectsByCategory } from "../data/projects";
+
+const vanillaProjects = getProjectsByCategory("vanilla");
+---
+
+<BaseLayout
+  title="Landing Pages Portfolio | Catálogo de experiências digitais"
+  description="Uma coleção de landing pages fictícias desenvolvidas com diferentes stacks, segmentos e objetivos, com atenção a design, acessibilidade e performance."
+>
+  <Hero />
+  <CategorySection
+    category="Landing pages vanilla"
+    description="Projetos construídos com HTML, CSS e JavaScript puro, sem frameworks ou dependências de interface."
+    projects={vanillaProjects}
+  />
+  <ProcessSection />
+  <QualitySection />
+  <ContactSection />
+</BaseLayout>

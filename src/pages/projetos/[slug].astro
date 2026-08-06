@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectPreview from "../../components/ProjectPreview.astro";
+import { projects, type Project } from "../../data/projects";
+import { getProjectDetail } from "../../data/projectDetails";
+import { withBase } from "../../utils/url";
+
+export function getStaticPaths() {
+  return projects
+    .filter((project) => project.hasDetailPage)
+    .map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const detail = getProjectDetail(project.slug);
+
+if (!detail) {
+  throw new Error(`Faltando conteúdo em projectDetails.ts para "${project.slug}".`);
+}
+
+const catalogHref = `${withBase("")}#projetos`;
+const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
+---
+
+<BaseLayout title={`${project.name} | Landing Pages Portfolio`} description={project.description} path={`projetos/${project.slug}`}>
+  <article class="section detail">
+    <div class="container detail__grid">
+      <a class="back-link" href={catalogHref}>&larr; Voltar ao catálogo</a>
+
+      <header class="detail__header" style={`--accent: ${project.accent};`}>
+        <div class="detail__meta">
+          <span class="status-badge status-badge--done">Concluído</span>
+          <span class="detail__segment">{project.segment} &middot; {project.year}</span>
+        </div>
+        <h1>{project.name}</h1>
+        <p class="detail__lead">{detail.overview}</p>
+        <ul class="tag-list">
+          {project.stack.map((item) => <li>{item}</li>)}
+        </ul>
+        <div class="detail__actions">
+          {demoHref && <a class="button" href={demoHref}>Ver demonstração</a>}
+          {project.codeUrl && (
+            <a class="button button--secondary" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
+              Ver código
+            </a>
+          )}
+        </div>
+      </header>
+
+      <div class="detail__preview">
+        <ProjectPreview style={project.previewStyle} accent={project.accent} label={project.name} />
+        <p class="detail__preview-note">
+          Screenshot real ainda não adicionado. Para incluir, salve a imagem em
+          <code>public/images/projects/{project.slug}.webp</code> e referencie-a nesta página.
+        </p>
+      </div>
+
+      <div class="detail__content">
+        <section aria-labelledby="problema-title">
+          <h2 id="problema-title">Problema</h2>
+          <p>{detail.problem}</p>
+        </section>
+
+        <section aria-labelledby="objetivo-title">
+          <h2 id="objetivo-title">Objetivo</h2>
+          <p>{detail.objective}</p>
+        </section>
+
+        <section aria-labelledby="publico-title">
+          <h2 id="publico-title">Público</h2>
+          <p>{detail.audience}</p>
+        </section>
+
+        <section aria-labelledby="funcionalidades-title">
+          <h2 id="funcionalidades-title">Funcionalidades</h2>
+          <ul class="detail__list">
+            {detail.features.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="visual-title">
+          <h2 id="visual-title">Decisões visuais</h2>
+          <ul class="detail__list">
+            {detail.visualDecisions.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="acessibilidade-title">
+          <h2 id="acessibilidade-title">Acessibilidade</h2>
+          <ul class="detail__list">
+            {detail.accessibility.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="performance-title">
+          <h2 id="performance-title">Performance</h2>
+          <ul class="detail__list">
+            {detail.performance.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .detail__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .back-link {
+    color: var(--color-muted-strong);
+    font-weight: 700;
+    justify-self: start;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 0.25rem;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  .detail__header {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .detail__meta {
+    align-items: center;
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .detail__segment {
+    color: var(--color-muted);
+    font-weight: 700;
+  }
+
+  .detail__lead {
+    color: var(--color-muted-strong);
+    font-size: 1.05rem;
+    max-width: 60ch;
+  }
+
+  .detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .detail__preview {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .detail__preview :global(.preview) {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+  }
+
+  .detail__preview-note {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .detail__preview-note code {
+    background: var(--color-surface-raised);
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .detail__content {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .detail__content h2 {
+    font-size: 1.35rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .detail__content p {
+    color: var(--color-muted-strong);
+    max-width: 68ch;
+  }
+
+  .detail__list {
+    display: grid;
+    gap: var(--space-2);
+    list-style: none;
+  }
+
+  .detail__list li {
+    color: var(--color-muted-strong);
+    padding-left: var(--space-4);
+    position: relative;
+  }
+
+  .detail__list li::before {
+    color: var(--color-accent-strong);
+    content: "—";
+    left: 0;
+    position: absolute;
+  }
+
+  @media (min-width: 1024px) {
+    .detail__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .back-link,
+    .detail__content {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

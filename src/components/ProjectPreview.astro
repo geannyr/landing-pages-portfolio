@@ -1,0 +1,222 @@
+---
+import type { PreviewStyle } from "../data/projects";
+
+interface Props {
+  style: PreviewStyle;
+  accent: string;
+  label: string;
+}
+
+const { style, accent, label } = Astro.props;
+---
+
+<div class="preview" style={`--accent: ${accent};`} aria-hidden="true">
+  <span class="preview__window"><span></span><span></span><span></span></span>
+
+  {
+    style === "screenshot" && (
+      <div class="preview__body preview__body--screenshot">
+        <span class="preview__label">{label}</span>
+        <span class="preview__note">Preview em breve</span>
+      </div>
+    )
+  }
+
+  {
+    style === "dashboard" && (
+      <div class="preview__body preview__body--dashboard">
+        <div class="preview__sidebar" />
+        <div class="preview__main">
+          <div class="preview__stat" />
+          <div class="preview__stat" />
+          <div class="preview__stat" />
+          <div class="preview__chart">
+            <span style="height: 40%" /><span style="height: 70%" /><span style="height: 50%" /><span style="height: 85%" /><span
+              style="height: 60%"
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    style === "editorial" && (
+      <div class="preview__body preview__body--editorial">
+        <div class="preview__block preview__block--title" />
+        <div class="preview__block" />
+        <div class="preview__block preview__block--short" />
+        <div class="preview__rule" />
+        <div class="preview__block" />
+        <div class="preview__block preview__block--short" />
+      </div>
+    )
+  }
+
+  {
+    style === "course" && (
+      <div class="preview__body preview__body--course">
+        <div class="preview__course-card" />
+        <div class="preview__course-card" />
+        <div class="preview__progress">
+          <span></span>
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .preview {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, var(--color-surface)), var(--color-surface) 70%);
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+  }
+
+  .preview__window {
+    display: flex;
+    gap: 0.3rem;
+    left: var(--space-4);
+    position: absolute;
+    top: var(--space-4);
+  }
+
+  .preview__window span {
+    background: var(--accent);
+    border-radius: 999px;
+    display: block;
+    height: 0.45rem;
+    opacity: 0.6;
+    width: 0.45rem;
+  }
+
+  .preview__body {
+    height: 100%;
+    padding: var(--space-6) var(--space-5) var(--space-4);
+    width: 100%;
+  }
+
+  /* screenshot */
+  .preview__body--screenshot {
+    align-items: center;
+    display: grid;
+    height: 100%;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .preview__label {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .preview__note {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    margin-top: var(--space-1);
+  }
+
+  /* dashboard */
+  .preview__body--dashboard {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 22% 1fr;
+    height: 100%;
+  }
+
+  .preview__sidebar {
+    background: color-mix(in srgb, var(--accent) 24%, var(--color-surface-raised));
+    border-radius: var(--radius-sm);
+  }
+
+  .preview__main {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-rows: auto 1fr;
+  }
+
+  .preview__stat {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    height: 1.6rem;
+    margin-right: var(--space-2);
+    width: 28%;
+  }
+
+  .preview__chart {
+    align-items: flex-end;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .preview__chart span {
+    background: var(--accent);
+    border-radius: 999px 999px 0 0;
+    flex: 1;
+    opacity: 0.75;
+  }
+
+  /* editorial */
+  .preview__body--editorial {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .preview__block {
+    background: var(--color-surface-raised);
+    border-radius: var(--radius-sm);
+    height: 0.8rem;
+    width: 100%;
+  }
+
+  .preview__block--title {
+    background: color-mix(in srgb, var(--accent) 40%, var(--color-surface-raised));
+    height: 1.4rem;
+    width: 65%;
+  }
+
+  .preview__block--short {
+    width: 55%;
+  }
+
+  .preview__rule {
+    background: var(--color-border);
+    height: 1px;
+    margin: var(--space-2) 0;
+    width: 100%;
+  }
+
+  /* course */
+  .preview__body--course {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-rows: 1fr 1fr auto;
+  }
+
+  .preview__course-card {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .preview__progress {
+    background: var(--color-surface-raised);
+    border-radius: 999px;
+    height: 0.6rem;
+    overflow: hidden;
+  }
+
+  .preview__progress span {
+    background: var(--accent);
+    display: block;
+    height: 100%;
+    width: 62%;
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+import type { Project } from "../data/projects";
+import ProjectGrid from "./ProjectGrid.astro";
+
+interface Props {
+  category: string;
+  description: string;
+  projects: Project[];
+}
+
+const { category, description, projects } = Astro.props;
+const count = projects.length;
+const countLabel = `${count} ${count === 1 ? "projeto" : "projetos"}`;
+---
+
+<section class="section" id="projetos" aria-labelledby="projetos-title">
+  <div class="container">
+    <div class="section-heading">
+      <p class="eyebrow">Projetos</p>
+      <div class="category-heading">
+        <h2 id="projetos-title">{category}</h2>
+        <span class="category-count">{countLabel}</span>
+      </div>
+      <p>{description}</p>
+    </div>
+
+    <ProjectGrid projects={projects} />
+  </div>
+</section>
+
+<style>
+  .category-heading {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .category-count {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+</style>

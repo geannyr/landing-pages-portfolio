@@ -1,0 +1,89 @@
+---
+import { withBase } from "../utils/url";
+
+const home = withBase("");
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <strong>Landing Pages Portfolio</strong>
+      <p>Projeto fictício desenvolvido para fins de portfólio front-end. Nenhuma marca, empresa ou pessoa real é representada.</p>
+    </div>
+    <nav aria-label="Links do rodapé">
+      <a href={`${home}#projetos`}>Projetos</a>
+      <a href={`${home}#processo`}>Processo</a>
+      <a href={`${home}#qualidade`}>Qualidade</a>
+      <a href={`${home}#contato`}>Contato</a>
+    </nav>
+    <div class="footer-contact">
+      <a data-contact="github" aria-disabled="true">GitHub</a>
+      <a data-contact="linkedin" aria-disabled="true">LinkedIn</a>
+      <a data-contact="email" aria-disabled="true">E-mail</a>
+    </div>
+    <p class="footer-meta">Autoria: landing-pages-portfolio &middot; &copy; <span id="current-year">2026</span></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-bg-alt);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted-strong);
+    padding: var(--space-8) 0 var(--space-7);
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .site-footer strong {
+    color: var(--color-text);
+  }
+
+  .site-footer p {
+    color: var(--color-muted);
+    margin-top: var(--space-2);
+  }
+
+  .site-footer nav,
+  .footer-contact {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .site-footer a {
+    color: var(--color-muted-strong);
+    min-height: 2.25rem;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.25rem;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-text);
+  }
+
+  .footer-meta {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
+    }
+
+    .footer-meta {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  const yearElement = document.querySelector("#current-year");
+
+  if (yearElement) {
+    yearElement.textContent = String(new Date().getFullYear());
+  }
+</script>
