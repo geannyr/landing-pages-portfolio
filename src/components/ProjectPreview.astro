@@ -1,23 +1,63 @@
 ---
 import type { PreviewStyle } from "../data/projects";
+import { hasProjectScreenshot, projectScreenshotUrl } from "../utils/screenshot";
 
 interface Props {
   style: PreviewStyle;
   accent: string;
   label: string;
+  segment: string;
+  /** Nome da View Transition (astro:transitions) para casar com o mesmo preview na página de detalhes. Omitido = sem transição nomeada. */
+  transitionName?: string;
+  /** slug do projeto — usado para procurar public/images/projects/{slug}-preview.webp. */
+  slug?: string;
+  /** Obrigatório para renderizar a imagem real (sem alt não há <img>, só o fallback). */
+  screenshotAlt?: string;
 }
 
-const { style, accent, label } = Astro.props;
+const { style, accent, label, segment, transitionName, slug, screenshotAlt } = Astro.props;
+const hasScreenshot = Boolean(slug && screenshotAlt && hasProjectScreenshot(slug));
+const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undefined;
 ---
 
-<div class="preview" style={`--accent: ${accent};`} aria-hidden="true">
-  <span class="preview__window"><span></span><span></span><span></span></span>
+<div class="preview" style={`--accent: ${accent};`} aria-hidden={hasScreenshot ? undefined : "true"} transition:name={transitionName}>
+  {
+    hasScreenshot && screenshotUrl ? (
+      <img
+        class="preview__image"
+        src={screenshotUrl}
+        width="1280"
+        height="800"
+        alt={screenshotAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <>
+        <div class="preview__texture" aria-hidden="true" />
+        <span class="preview__window" aria-hidden="true"><span></span><span></span><span></span></span>
+      </>
+    )
+  }
 
   {
-    style === "screenshot" && (
+    !hasScreenshot && style === "screenshot" && (
       <div class="preview__body preview__body--screenshot">
-        <span class="preview__label">{label}</span>
-        <span class="preview__note">Preview em breve</span>
+        <div class="preview__site-bar">
+          <span class="preview__site-mark" />
+          <span class="preview__site-line" />
+        </div>
+        <div class="preview__site-hero">
+          <span class="preview__site-title" />
+          <span class="preview__site-title preview__site-title--short" />
+        </div>
+        <div class="preview__site-tags">
+          <span />
+          <span />
+          <span />
+        </div>
+        <span class="preview__site-cta" />
+        <span class="preview__note">{label} — preview em breve</span>
       </div>
     )
   }
@@ -25,15 +65,19 @@ const { style, accent, label } = Astro.props;
   {
     style === "dashboard" && (
       <div class="preview__body preview__body--dashboard">
-        <div class="preview__sidebar" />
+        <div class="preview__sidebar">
+          <span />
+          <span />
+          <span />
+        </div>
         <div class="preview__main">
-          <div class="preview__stat" />
-          <div class="preview__stat" />
-          <div class="preview__stat" />
+          <div class="preview__stat-row">
+            <div class="preview__stat" />
+            <div class="preview__stat" />
+            <div class="preview__stat" />
+          </div>
           <div class="preview__chart">
-            <span style="height: 40%" /><span style="height: 70%" /><span style="height: 50%" /><span style="height: 85%" /><span
-              style="height: 60%"
-            />
+            <span style="height: 35%" /><span style="height: 68%" /><span style="height: 48%" /><span style="height: 82%" /><span style="height: 58%" /><span style="height: 90%" />
           </div>
         </div>
       </div>
@@ -43,12 +87,16 @@ const { style, accent, label } = Astro.props;
   {
     style === "editorial" && (
       <div class="preview__body preview__body--editorial">
+        <span class="preview__monogram" />
         <div class="preview__block preview__block--title" />
         <div class="preview__block" />
         <div class="preview__block preview__block--short" />
         <div class="preview__rule" />
-        <div class="preview__block" />
-        <div class="preview__block preview__block--short" />
+        <div class="preview__columns">
+          <div class="preview__block" />
+          <div class="preview__block preview__block--short" />
+          <div class="preview__block" />
+        </div>
       </div>
     )
   }
@@ -56,22 +104,42 @@ const { style, accent, label } = Astro.props;
   {
     style === "course" && (
       <div class="preview__body preview__body--course">
-        <div class="preview__course-card" />
-        <div class="preview__course-card" />
+        <div class="preview__course-row">
+          <div class="preview__course-card"><span /></div>
+          <div class="preview__course-card"><span /></div>
+        </div>
         <div class="preview__progress">
           <span></span>
         </div>
       </div>
     )
   }
+
+  <span class="preview__segment" aria-hidden="true">{segment}</span>
 </div>
 
 <style>
   .preview {
     aspect-ratio: 16 / 10;
-    background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, var(--color-surface)), var(--color-surface) 70%);
+    background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--color-surface-raised)), var(--color-surface) 85%);
     border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
     position: relative;
+  }
+
+  .preview__image {
+    aspect-ratio: 16 / 10;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .preview__texture {
+    background-image: radial-gradient(color-mix(in srgb, var(--color-text) 14%, transparent) 1px, transparent 1px);
+    background-size: 14px 14px;
+    inset: 0;
+    opacity: 0.35;
+    position: absolute;
   }
 
   .preview__window {
@@ -80,6 +148,7 @@ const { style, accent, label } = Astro.props;
     left: var(--space-4);
     position: absolute;
     top: var(--space-4);
+    z-index: 1;
   }
 
   .preview__window span {
@@ -87,47 +156,124 @@ const { style, accent, label } = Astro.props;
     border-radius: 999px;
     display: block;
     height: 0.45rem;
-    opacity: 0.6;
+    opacity: 0.7;
     width: 0.45rem;
+  }
+
+  .preview__segment {
+    background: color-mix(in srgb, var(--color-bg) 55%, transparent);
+    border-radius: 999px;
+    bottom: var(--space-3);
+    color: var(--color-text);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    position: absolute;
+    right: var(--space-3);
+    z-index: 1;
   }
 
   .preview__body {
     height: 100%;
     padding: var(--space-6) var(--space-5) var(--space-4);
+    position: relative;
     width: 100%;
+    z-index: 1;
   }
 
   /* screenshot */
   .preview__body--screenshot {
-    align-items: center;
     display: grid;
-    height: 100%;
-    justify-items: center;
-    text-align: center;
+    gap: var(--space-3);
   }
 
-  .preview__label {
-    color: var(--accent);
-    font-weight: 800;
+  .preview__site-bar {
+    align-items: center;
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .preview__site-mark {
+    background: var(--accent);
+    border-radius: 999px;
+    height: 0.9rem;
+    width: 0.9rem;
+  }
+
+  .preview__site-line {
+    background: color-mix(in srgb, var(--color-text) 20%, transparent);
+    border-radius: 999px;
+    height: 0.4rem;
+    width: 40%;
+  }
+
+  .preview__site-hero {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .preview__site-title {
+    background: color-mix(in srgb, var(--color-text) 30%, transparent);
+    border-radius: var(--radius-sm);
+    height: 1rem;
+    width: 80%;
+  }
+
+  .preview__site-title--short {
+    width: 55%;
+  }
+
+  .preview__site-tags {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .preview__site-tags span {
+    background: color-mix(in srgb, var(--accent) 30%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    border-radius: 999px;
+    height: 1.1rem;
+    width: 22%;
+  }
+
+  .preview__site-cta {
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+    height: 1.6rem;
+    margin-top: var(--space-1);
+    width: 34%;
   }
 
   .preview__note {
-    color: var(--color-muted);
-    font-size: 0.78rem;
-    margin-top: var(--space-1);
+    color: var(--color-muted-strong);
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-top: auto;
   }
 
   /* dashboard */
   .preview__body--dashboard {
     display: grid;
     gap: var(--space-3);
-    grid-template-columns: 22% 1fr;
+    grid-template-columns: 24% 1fr;
     height: 100%;
   }
 
   .preview__sidebar {
-    background: color-mix(in srgb, var(--accent) 24%, var(--color-surface-raised));
+    background: color-mix(in srgb, var(--accent) 28%, var(--color-surface-raised));
     border-radius: var(--radius-sm);
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-2);
+  }
+
+  .preview__sidebar span {
+    background: color-mix(in srgb, var(--color-text) 35%, transparent);
+    border-radius: 999px;
+    height: 0.35rem;
+    width: 100%;
   }
 
   .preview__main {
@@ -136,14 +282,17 @@ const { style, accent, label } = Astro.props;
     grid-template-rows: auto 1fr;
   }
 
+  .preview__stat-row {
+    display: flex;
+    gap: var(--space-2);
+  }
+
   .preview__stat {
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    display: inline-block;
-    height: 1.6rem;
-    margin-right: var(--space-2);
-    width: 28%;
+    height: 1.7rem;
+    flex: 1;
   }
 
   .preview__chart {
@@ -160,7 +309,7 @@ const { style, accent, label } = Astro.props;
     background: var(--accent);
     border-radius: 999px 999px 0 0;
     flex: 1;
-    opacity: 0.75;
+    opacity: 0.85;
   }
 
   /* editorial */
@@ -169,15 +318,23 @@ const { style, accent, label } = Astro.props;
     gap: var(--space-2);
   }
 
+  .preview__monogram {
+    background: color-mix(in srgb, var(--accent) 45%, var(--color-surface-raised));
+    border-radius: 999px;
+    height: 1.6rem;
+    margin-bottom: var(--space-1);
+    width: 1.6rem;
+  }
+
   .preview__block {
-    background: var(--color-surface-raised);
+    background: color-mix(in srgb, var(--color-text) 16%, var(--color-surface-raised));
     border-radius: var(--radius-sm);
     height: 0.8rem;
     width: 100%;
   }
 
   .preview__block--title {
-    background: color-mix(in srgb, var(--accent) 40%, var(--color-surface-raised));
+    background: color-mix(in srgb, var(--accent) 45%, var(--color-surface-raised));
     height: 1.4rem;
     width: 65%;
   }
@@ -189,21 +346,44 @@ const { style, accent, label } = Astro.props;
   .preview__rule {
     background: var(--color-border);
     height: 1px;
-    margin: var(--space-2) 0;
+    margin: var(--space-1) 0;
     width: 100%;
+  }
+
+  .preview__columns {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   /* course */
   .preview__body--course {
     display: grid;
     gap: var(--space-3);
-    grid-template-rows: 1fr 1fr auto;
+    grid-template-rows: 1fr auto;
+    height: 100%;
+  }
+
+  .preview__course-row {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .preview__course-card {
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
+    display: grid;
+    align-content: start;
+    padding: var(--space-2);
+  }
+
+  .preview__course-card span {
+    background: color-mix(in srgb, var(--accent) 40%, transparent);
+    border-radius: var(--radius-sm);
+    height: 60%;
+    width: 60%;
   }
 
   .preview__progress {

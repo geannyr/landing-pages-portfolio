@@ -4,6 +4,7 @@ import ProjectPreview from "../../components/ProjectPreview.astro";
 import { projects, type Project } from "../../data/projects";
 import { getProjectDetail } from "../../data/projectDetails";
 import { withBase } from "../../utils/url";
+import { hasProjectScreenshot } from "../../utils/screenshot";
 
 export function getStaticPaths() {
   return projects
@@ -24,25 +25,31 @@ if (!detail) {
 
 const catalogHref = `${withBase("")}#projetos`;
 const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
+const hasScreenshot = hasProjectScreenshot(project.slug);
 ---
 
-<BaseLayout title={`${project.name} | Landing Pages Portfolio`} description={project.description} path={`projetos/${project.slug}`}>
+<BaseLayout title={`${project.name} | Landing Lab`} description={project.description} path={`projetos/${project.slug}`}>
   <article class="section detail">
     <div class="container detail__grid">
       <a class="back-link" href={catalogHref}>&larr; Voltar ao catálogo</a>
 
-      <header class="detail__header" style={`--accent: ${project.accent};`}>
+      <header class="detail__header reveal" style={`--accent: ${project.accent};`}>
         <div class="detail__meta">
           <span class="status-badge status-badge--done">Concluído</span>
           <span class="detail__segment">{project.segment} &middot; {project.year}</span>
         </div>
         <h1>{project.name}</h1>
         <p class="detail__lead">{detail.overview}</p>
+        <p class="detail__disclaimer">{detail.disclaimer}</p>
         <ul class="tag-list">
           {project.stack.map((item) => <li>{item}</li>)}
         </ul>
         <div class="detail__actions">
-          {demoHref && <a class="button" href={demoHref}>Ver demonstração</a>}
+          {demoHref && (
+            <a class="button" href={demoHref} data-astro-reload>
+              Ver demonstração
+            </a>
+          )}
           {project.codeUrl && (
             <a class="button button--secondary" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
               Ver código
@@ -52,14 +59,26 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
       </header>
 
       <div class="detail__preview">
-        <ProjectPreview style={project.previewStyle} accent={project.accent} label={project.name} />
-        <p class="detail__preview-note">
-          Screenshot real ainda não adicionado. Para incluir, salve a imagem em
-          <code>public/images/projects/{project.slug}.webp</code> e referencie-a nesta página.
-        </p>
+        <ProjectPreview
+          style={project.previewStyle}
+          accent={project.accent}
+          label={project.name}
+          segment={project.segment}
+          transitionName={`project-preview-${project.slug}`}
+          slug={project.slug}
+          screenshotAlt={detail.screenshotAlt}
+        />
+        {!hasScreenshot && (
+          <p class="detail__preview-note">
+            Screenshot real ainda não adicionado. Para incluir, salve a imagem em
+            <code>
+              public/images/projects/{project.slug}-preview.webp
+            </code> (1280×800, formato WebP).
+          </p>
+        )}
       </div>
 
-      <div class="detail__content">
+      <div class="detail__content reveal" style="transition-delay: 100ms">
         <section aria-labelledby="problema-title">
           <h2 id="problema-title">Problema</h2>
           <p>{detail.problem}</p>
@@ -100,6 +119,14 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
           <h2 id="performance-title">Performance</h2>
           <ul class="detail__list">
             {detail.performance.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="validacao-title">
+          <h2 id="validacao-title">Validação</h2>
+          <p>Fatos confirmados por testes reais neste projeto — sem métricas comerciais inventadas.</p>
+          <ul class="detail__list">
+            {detail.validation.map((item) => <li>{item}</li>)}
           </ul>
         </section>
       </div>
@@ -145,6 +172,15 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
     color: var(--color-muted-strong);
     font-size: 1.05rem;
     max-width: 60ch;
+  }
+
+  .detail__disclaimer {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-muted-strong);
+    font-size: 0.88rem;
+    padding: var(--space-3) var(--space-4);
   }
 
   .detail__actions {

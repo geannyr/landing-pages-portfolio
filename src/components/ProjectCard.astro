@@ -2,19 +2,46 @@
 import type { Project } from "../data/projects";
 import ProjectPreview from "./ProjectPreview.astro";
 import { withBase } from "../utils/url";
+import { getProjectDetail } from "../data/projectDetails";
 
 interface Props {
   project: Project;
+  featured?: boolean;
+  /** Posição no grid, usada só para escalonar o delay da animação de entrada. */
+  index?: number;
 }
 
-const { project } = Astro.props;
+const { project, featured = false, index = 0 } = Astro.props;
 const isCompleted = project.status === "completed";
+const detail = project.hasDetailPage ? getProjectDetail(project.slug) : undefined;
 const detailHref = project.hasDetailPage ? withBase(`projetos/${project.slug}`) : undefined;
 const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
+const transitionName = project.hasDetailPage ? `project-preview-${project.slug}` : undefined;
+const cardStyle = `--accent: ${project.accent}; transition-delay: ${Math.min(index, 4) * 70}ms;`;
+
+// Texto editorial de apoio para projetos planejados. O status semântico e o
+// badge continuam sempre "Planejado" — isto só varia a frase complementar.
+const plannedNotes: Record<string, string> = {
+  "saas-pequenos-negocios": "Próximo estudo da coleção.",
+  "consultoria-empresarial": "Desenvolvimento previsto para uma próxima etapa.",
+  "plataforma-preparatoria": "Conceito reservado para a expansão do catálogo."
+};
+const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima etapa da coleção.";
 ---
 
-<article class:list={["project-card", { "project-card--planned": !isCompleted }]} style={`--accent: ${project.accent};`}>
-  <ProjectPreview style={project.previewStyle} accent={project.accent} label={project.name} />
+<article
+  class:list={["project-card", "reveal", { "project-card--planned": !isCompleted, "project-card--featured": featured }]}
+  style={cardStyle}
+>
+  <ProjectPreview
+    style={project.previewStyle}
+    accent={project.accent}
+    label={project.name}
+    segment={project.segment}
+    transitionName={transitionName}
+    slug={project.slug}
+    screenshotAlt={detail?.screenshotAlt}
+  />
 
   <div class="project-card__body">
     <div class="project-card__meta">
@@ -24,31 +51,43 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
       <span class="project-card__segment">{project.segment}</span>
     </div>
 
+    {featured && <p class="project-card__flag">Case em destaque</p>}
+
     <h3>{project.name}</h3>
     <p class="project-card__description">{project.description}</p>
     <p class="project-card__goal"><strong>Objetivo:</strong> {project.goal}</p>
 
-    <ul class="tag-list">
-      {(isCompleted ? project.highlights : project.stack).map((item) => <li>{item}</li>)}
-    </ul>
-
     {
       isCompleted ? (
-        <div class="project-card__actions">
-          {demoHref && (
-            <a class="text-link" href={demoHref}>
-              Ver projeto<span aria-hidden="true">→</span>
-            </a>
-          )}
-          {detailHref && <a class="text-link text-link--muted" href={detailHref}>Ver detalhes</a>}
-          {project.codeUrl && (
-            <a class="text-link text-link--muted" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
-              Código
-            </a>
-          )}
-        </div>
+        <>
+          <ul class="tag-list">
+            {project.highlights.map((item) => <li>{item}</li>)}
+          </ul>
+          <div class="project-card__actions">
+            {demoHref && (
+              // data-astro-reload: navegação completa e não interceptada pelo ClientRouter —
+              // saude/ é um documento vanilla independente, fora do roteador do Astro.
+              <a class="text-link" href={demoHref} data-astro-reload>
+                Ver demonstração<span aria-hidden="true">→</span>
+              </a>
+            )}
+            {detailHref && <a class="text-link text-link--muted" href={detailHref}>Ver case</a>}
+            {project.codeUrl && (
+              <a class="text-link text-link--muted" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
+                Ver código
+              </a>
+            )}
+          </div>
+        </>
       ) : (
-        <p class="project-card__note">Em breve.</p>
+        <>
+          <p class="project-card__label">Destaques previstos</p>
+          <ul class="tag-list">
+            {project.highlights.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="project-card__stack">Stack prevista: {project.stack.join(", ")}</p>
+          <p class="project-card__note">{plannedNote}</p>
+        </>
       )
     }
   </div>
@@ -62,7 +101,11 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
     box-shadow: var(--shadow-card);
     display: grid;
     overflow: hidden;
-    transition: transform var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow);
+    /* opacity/transform aqui (em vez de só no .reveal global) porque esta regra,
+       sendo do componente, tem especificidade maior e sobrescreveria o timing da
+       entrada — precisa incluir os dois para a animação de entrada ficar suave. */
+    transition: transform var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-slow),
+      opacity var(--transition-slow);
   }
 
   .project-card:not(.project-card--planned):hover {
@@ -75,10 +118,42 @@ const demoHref = project.demoPath ? withBase(project.demoPath) : undefined;
     border-style: dashed;
   }
 
+  .project-card--featured {
+    box-shadow: var(--shadow-raised);
+  }
+
   .project-card__body {
     display: grid;
     gap: var(--space-3);
     padding: var(--space-5);
+  }
+
+  .project-card--featured .project-card__body {
+    padding: var(--space-6);
+  }
+
+  .project-card--featured h3 {
+    font-size: 1.5rem;
+  }
+
+  .project-card__flag {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .project-card__label {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .project-card__stack {
+    color: var(--color-muted);
+    font-size: 0.8rem;
   }
 
   .project-card__meta {

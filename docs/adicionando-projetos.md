@@ -55,15 +55,21 @@ está para ser adicionado).
 
 ## 3. Screenshot real
 
-Ainda não existe nenhum screenshot no repositório. Quando tiver um:
+`ProjectPreview.astro` já sabe procurar um screenshot real automaticamente — não
+precisa editar nenhum componente para ativá-lo.
 
-1. Salve em `public/images/projects/{slug}.webp` (ou `.avif`), com dimensões
-   fixas conhecidas (ex.: 1280×800).
-2. No card (`src/components/ProjectPreview.astro`) e na página de detalhes
-   (`src/pages/projetos/[slug].astro`), troque a composição abstrata por uma tag
-   `<img>` apontando para `withBase`/`asset` do arquivo, com `width`, `height` e
-   `loading="lazy"` quando a imagem estiver abaixo da dobra.
-3. Não referencie caminhos locais do seu computador nem arquivos temporários —
+1. Salve a imagem em `public/images/projects/{slug}-preview.webp`, no formato
+   WebP, com dimensões conhecidas (o componente usa 1280×800 / 16:10).
+2. Em `src/data/projectDetails.ts`, preencha o campo `screenshotAlt` da entrada
+   do projeto com um texto alternativo descritivo (ex.: "Prévia da landing page
+   {Nome}, projeto fictício de {segmento}.").
+3. Rode `npm run build` (ou `npm run dev`) — `hasProjectScreenshot()`
+   (`src/utils/screenshot.ts`) verifica em build time se o arquivo existe; se
+   existir, o card e a página de detalhes passam a exibir a imagem real
+   automaticamente, com `width`/`height`/`aspect-ratio`/`object-fit` já
+   configurados para não causar layout shift. Se não existir, o fallback visual
+   (composição abstrata) continua sendo exibido.
+4. Não referencie caminhos locais do seu computador nem arquivos temporários —
    o arquivo precisa estar dentro de `public/` e commitado.
 
 ## 4. Página de detalhes (`/projetos/{slug}/`)
@@ -71,8 +77,13 @@ Ainda não existe nenhum screenshot no repositório. Quando tiver um:
 Só crie uma entrada em `src/data/projectDetails.ts` (e marque
 `hasDetailPage: true` em `projects.ts`) quando o projeto realmente existir e você
 tiver conteúdo verificável para preencher: problema, objetivo, público,
-funcionalidades, decisões visuais, acessibilidade e performance. Não descreva
-métricas ou resultados de conversão que não foram medidos de verdade.
+funcionalidades, decisões visuais, acessibilidade, performance e `validation`
+(fatos de teste confirmados — não métricas comerciais). Preencha também
+`disclaimer` (deixando claro que a empresa retratada é fictícia, mas a
+implementação é real) e `screenshotAlt` (texto alternativo para quando o
+screenshot real existir — ver seção 3). Não descreva métricas ou resultados de
+conversão que não foram medidos de verdade, nem execute ferramentas (ex.:
+Lighthouse) que não rodaram de fato.
 `getStaticPaths()` em `src/pages/projetos/[slug].astro` só gera a rota para
 projetos com `hasDetailPage: true` — um projeto planejado nunca ganha uma página
 de detalhes vazia.
@@ -91,8 +102,20 @@ de detalhes vazia.
 Nenhuma dessas mudanças exige alterar `ProjectCard.astro`, `ProjectGrid.astro` ou
 qualquer outro componente visual.
 
-## 6. Contato (GitHub, LinkedIn, e-mail, portfólio pessoal)
+## 6. Perfil e contato (GitHub, LinkedIn, e-mail, portfólio, repositório)
 
-Preencha os campos em `src/data/profile.ts`. Enquanto vazios, os links de
-contato aparecem sem `href` e um clique avisa "Link de contato ainda não
-configurado" — nunca aponte para uma URL inventada só para "preencher".
+Tudo fica em `src/data/profile.ts`: `name`, `professionalTitle`, `github`,
+`linkedin`, `email` (já preenchidos com dados reais), além de `website`
+(portfólio pessoal) e `repositoryUrl` (repositório do próprio
+landing-pages-portfolio, distinto do GitHub pessoal — usado no botão "Ver
+código no GitHub" do hero).
+
+`website` e `repositoryUrl` são opcionais por natureza: os templates (`Footer`,
+`ContactSection`) só renderizam o link quando o valor não está vazio — não existe
+estado "desabilitado" nesses dois. Para `github`/`linkedin`/`email` (sempre
+preenchidos hoje), o mecanismo de fallback em `src/scripts/contact-links.ts`
+continua existindo por robustez, mas não deve normalmente entrar em ação.
+
+Nunca aponte nenhum desses campos para uma URL inventada. Não adicione telefone
+nem endereço/localização detalhada a este arquivo — são dados que este projeto
+não publica.

@@ -1,12 +1,16 @@
+---
+import { profile } from "../data/profile";
+---
+
 <section class="final-cta" id="contato" aria-labelledby="cta-title">
-  <div class="container final-cta__inner">
+  <div class="container final-cta__inner reveal">
     <h2 id="cta-title">Vamos conversar sobre o próximo projeto?</h2>
-    <p>Explore os projetos do portfólio ou entre em contato pelos canais abaixo.</p>
+    <p>A forma mais direta de falar comigo é por e-mail. GitHub e LinkedIn reúnem o código e o histórico profissional.</p>
     <div class="contact-links">
-      <a class="button button--secondary" data-contact="github" aria-disabled="true">GitHub</a>
-      <a class="button button--secondary" data-contact="linkedin" aria-disabled="true">LinkedIn</a>
-      <a class="button button--secondary" data-contact="email" aria-disabled="true">E-mail</a>
-      <a class="button button--secondary" data-contact="website" aria-disabled="true">Portfólio pessoal</a>
+      <a class="button" data-contact="email" aria-disabled="true">Conversar por e-mail</a>
+      <a class="button button--secondary" data-contact="github" aria-disabled="true">Ver GitHub</a>
+      <a class="button button--secondary" data-contact="linkedin" aria-disabled="true">Ver LinkedIn</a>
+      {profile.website && <a class="button button--secondary" data-contact="website" aria-disabled="true">Conhecer portfólio pessoal</a>}
     </div>
   </div>
 </section>
@@ -20,7 +24,7 @@
   }
 
   .final-cta::before {
-    background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.16), transparent 60%);
+    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 60%);
     content: "";
     inset: 0;
     position: absolute;

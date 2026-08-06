@@ -1,5 +1,6 @@
 ---
 import { withBase } from "../utils/url";
+import { profile } from "../data/profile";
 
 const home = withBase("");
 ---
@@ -7,8 +8,9 @@ const home = withBase("");
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <strong>Landing Pages Portfolio</strong>
-      <p>Projeto fictício desenvolvido para fins de portfólio front-end. Nenhuma marca, empresa ou pessoa real é representada.</p>
+      <strong>Landing Lab</strong>
+      <p>Coleção de projetos front-end criada por Geanny Rodrigues.</p>
+      <p class="footer-fineprint">Os projetos apresentados são fictícios e desenvolvidos para fins de portfólio.</p>
     </div>
     <nav aria-label="Links do rodapé">
       <a href={`${home}#projetos`}>Projetos</a>
@@ -17,11 +19,16 @@ const home = withBase("");
       <a href={`${home}#contato`}>Contato</a>
     </nav>
     <div class="footer-contact">
-      <a data-contact="github" aria-disabled="true">GitHub</a>
-      <a data-contact="linkedin" aria-disabled="true">LinkedIn</a>
-      <a data-contact="email" aria-disabled="true">E-mail</a>
+      {/* GitHub, LinkedIn e e-mail são valores fixos e sempre preenchidos em
+         profile.ts — renderizados como links reais diretamente, sem depender do
+         mecanismo de ativação em runtime (contact-links.ts), que existe para
+         campos genuinamente opcionais como website/repositoryUrl. */}
+      <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={profile.email}>E-mail</a>
+      {profile.website && <a data-contact="website" aria-disabled="true">Portfólio pessoal</a>}
     </div>
-    <p class="footer-meta">Autoria: landing-pages-portfolio &middot; &copy; <span id="current-year">2026</span></p>
+    <p class="footer-meta">&copy; <span id="current-year">2026</span> Geanny Rodrigues</p>
   </div>
 </footer>
 
@@ -47,6 +54,11 @@ const home = withBase("");
     margin-top: var(--space-2);
   }
 
+  .footer-fineprint {
+    font-size: 0.82rem;
+    margin-top: var(--space-1);
+  }
+
   .site-footer nav,
   .footer-contact {
     display: grid;
@@ -55,13 +67,16 @@ const home = withBase("");
 
   .site-footer a {
     color: var(--color-muted-strong);
+    display: inline-block;
     min-height: 2.25rem;
     text-decoration-color: var(--color-accent);
     text-underline-offset: 0.25rem;
+    transition: color var(--transition);
   }
 
-  .site-footer a:hover {
-    color: var(--color-text);
+  .site-footer a:hover,
+  .site-footer a:focus-visible {
+    color: var(--color-accent);
   }
 
   .footer-meta {

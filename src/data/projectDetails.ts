@@ -4,13 +4,19 @@
 export interface ProjectDetail {
   slug: string;
   overview: string;
+  /** Esclarece a distinção entre a empresa fictícia e a implementação real do projeto. */
+  disclaimer: string;
   problem: string;
   objective: string;
   audience: string;
   visualDecisions: string[];
   accessibility: string[];
   performance: string[];
+  /** Fatos de validação confirmados (testes reais) — nunca métricas comerciais inventadas. */
+  validation: string[];
   features: string[];
+  /** Texto alternativo do screenshot real, quando public/images/projects/{slug}-preview.webp existir. */
+  screenshotAlt: string;
 }
 
 export const projectDetails: Record<string, ProjectDetail> = {
@@ -18,6 +24,8 @@ export const projectDetails: Record<string, ProjectDetail> = {
     slug: "clinica-plena",
     overview:
       "Landing page fictícia de uma clínica multidisciplinar, com especialidades em psicologia, nutrição e fisioterapia. Construída em HTML, CSS e JavaScript puro, sem build e sem dependências externas.",
+    disclaimer:
+      "A Clínica Plena é uma empresa fictícia — nenhuma clínica real é representada. A implementação da landing page, porém, é real: código completo, testado e funcional, desenvolvido para portfólio.",
     problem:
       "Uma clínica com múltiplas especialidades precisa apresentar sua oferta com clareza e reduzir a fricção entre o interesse do visitante e o primeiro contato.",
     objective: "Captação de agendamentos pelo WhatsApp, com um formulário de contato como alternativa.",
@@ -41,12 +49,27 @@ export const projectDetails: Record<string, ProjectDetail> = {
       "Ícones, avatares e mapa construídos em CSS/SVG, evitando imagens pesadas.",
       "Elementos visuais com dimensões estáveis para reduzir mudanças de layout."
     ],
+    validation: [
+      "HTML, CSS e JavaScript puro",
+      "Layout mobile-first",
+      "Menu mobile acessível",
+      "FAQ em acordeão",
+      "Formulário com validação",
+      "Mensagens contextuais de WhatsApp",
+      "Suporte a prefers-reduced-motion",
+      "Seis viewports validados",
+      "Ausência de overflow horizontal",
+      "12 cenários de formulário testados",
+      "Zero erros relevantes no console",
+      "Zero recursos ausentes"
+    ],
     features: [
       "Botões de agendamento por WhatsApp com mensagem pré-preenchida",
       "Formulário de contato com validação no navegador",
       "FAQ em acordeão",
       "Menu mobile acessível"
-    ]
+    ],
+    screenshotAlt: "Prévia da landing page Clínica Plena, projeto fictício de clínica multidisciplinar."
   }
 };
 

@@ -1,12 +1,17 @@
-# Landing Pages Portfolio
+# Landing Lab
 
-Portfólio com quatro landing pages fictícias, criado para demonstrar organização,
+Coleção de projetos front-end criada por **Geanny Rodrigues** — Desenvolvedora
+Full Stack Java, com landing pages fictícias criadas para demonstrar organização,
 HTML semântico, CSS responsivo e atenção a acessibilidade e performance.
 
 A **página principal** (`/`) é um catálogo construído com **Astro**, gerado 100%
 estático — sem framework de UI, sem Tailwind, sem CMS, sem banco de dados. Cada
 **landing page de projeto** (ex.: `saude/`) é HTML, CSS e JavaScript puro,
 independente, sem build.
+
+As empresas apresentadas nos projetos (Clínica Plena, etc.) são fictícias — nenhuma
+marca real é representada. A implementação de cada projeto concluído, porém, é
+real: código completo, testado e funcional.
 
 ## Landing pages previstas
 
@@ -74,6 +79,15 @@ Netlify e GitHub Pages (incluindo o `BASE_PATH` necessário para subdiretório).
 
 Veja [docs/adicionando-projetos.md](docs/adicionando-projetos.md).
 
+## Perfil e dados públicos
+
+Nome, título profissional e links de contato ficam centralizados em
+[src/data/profile.ts](src/data/profile.ts). Campos públicos hoje: nome, título
+profissional, GitHub, LinkedIn e e-mail. `website` (portfólio pessoal) e
+`repositoryUrl` (repositório deste projeto) são opcionais — enquanto vazios, o
+link correspondente simplesmente não aparece na página (não é renderizado como
+"desabilitado"). Telefone e localização detalhada não são publicados.
+
 ## Status dos projetos
 
 | Projeto | Status |
@@ -84,4 +98,5 @@ Veja [docs/adicionando-projetos.md](docs/adicionando-projetos.md).
 | Consultoria | Apenas pasta reservada |
 | Educação | Apenas pasta reservada |
 
-Todo o conteúdo deste repositório é fictício e foi criado para fins de portfólio.
+As empresas e projetos apresentados são fictícios e foram criados para fins de
+portfólio. A autoria (Geanny Rodrigues) e os links de contato são reais.

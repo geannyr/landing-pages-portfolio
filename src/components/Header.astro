@@ -6,9 +6,9 @@ const home = withBase("");
 
 <header class="site-header">
   <div class="container header">
-    <a class="brand" href={home} aria-label="Landing Pages Portfolio, início">
-      <span class="brand__mark" aria-hidden="true">LP</span>
-      <span>Landing Pages Portfolio</span>
+    <a class="brand" href={home} aria-label="Landing Lab, início">
+      <span class="brand__mark" aria-hidden="true">GR<span class="brand__mark-dot">.</span></span>
+      <span class="brand__name">Landing Lab</span>
     </a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -28,7 +28,7 @@ const home = withBase("");
 
 <style>
   .site-header {
-    background: rgba(11, 11, 18, 0.92);
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
     border-bottom: 1px solid var(--color-border);
     min-height: var(--header-height);
     position: sticky;
@@ -47,8 +47,7 @@ const home = withBase("");
     align-items: center;
     color: var(--color-text);
     display: inline-flex;
-    font-weight: 800;
-    gap: var(--space-3);
+    gap: var(--space-2);
     text-decoration: none;
   }
 
@@ -58,10 +57,21 @@ const home = withBase("");
     border-radius: 999px;
     color: var(--color-on-accent);
     display: inline-flex;
-    font-size: 0.72rem;
-    height: 2.15rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    height: 2.25rem;
     justify-content: center;
-    width: 2.15rem;
+    letter-spacing: 0;
+    width: 2.25rem;
+  }
+
+  .brand__mark-dot {
+    color: color-mix(in srgb, var(--color-on-accent) 55%, transparent);
+  }
+
+  .brand__name {
+    font-weight: 800;
+    letter-spacing: -0.01em;
   }
 
   .nav-toggle {

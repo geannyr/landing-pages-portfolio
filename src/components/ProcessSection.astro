@@ -11,7 +11,7 @@ const steps = [
 
 <section class="section section--alt" id="processo" aria-labelledby="processo-title">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading reveal">
       <p class="eyebrow">Processo</p>
       <h2 id="processo-title">Como cada projeto é construído.</h2>
     </div>
@@ -35,50 +35,55 @@ const steps = [
 <style>
   .timeline {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-6);
     list-style: none;
+    margin: 0 auto;
+    max-width: 46rem;
+    position: relative;
+  }
+
+  /* Linha conectora — passa "atrás" dos índices numerados, dando leitura de
+     sequência editorial em vez de grade de cards repetidos. */
+  .timeline::before {
+    background: var(--color-border-strong);
+    bottom: 1.125rem;
+    content: "";
+    left: 1.125rem;
+    position: absolute;
+    top: 1.125rem;
+    width: 1px;
   }
 
   .timeline__item {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
     grid-template-columns: auto 1fr;
-    padding: var(--space-5);
+    position: relative;
   }
 
   .timeline__index {
     align-items: center;
-    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-strong);
     border-radius: 999px;
     color: var(--color-accent-strong);
     display: inline-flex;
     font-weight: 800;
     height: 2.25rem;
     justify-content: center;
+    position: relative;
     width: 2.25rem;
+    z-index: 1;
   }
 
   .timeline__item strong {
     color: var(--color-text);
+    display: block;
+    padding-top: 0.3rem;
   }
 
   .timeline__item p {
     color: var(--color-muted);
     margin-top: var(--space-1);
-  }
-
-  @media (min-width: 768px) {
-    .timeline {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .timeline {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
   }
 </style>

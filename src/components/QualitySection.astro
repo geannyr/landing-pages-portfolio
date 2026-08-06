@@ -11,57 +11,77 @@ const criteria = [
 
 <section class="section" id="qualidade" aria-labelledby="qualidade-title">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading reveal">
       <p class="eyebrow">Critérios de qualidade</p>
       <h2 id="qualidade-title">Padrões que valem para todos os projetos.</h2>
     </div>
 
-    <div class="quality-grid">
+    <ul class="quality-list">
       {
         criteria.map((item) => (
-          <div class="quality-item">
+          <li class="quality-item">
             <strong>{item.title}</strong>
             <p>{item.text}</p>
-          </div>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </div>
 </section>
 
 <style>
-  .quality-grid {
+  .quality-list {
+    border-top: 1px solid var(--color-border);
     display: grid;
-    gap: var(--space-4);
+    list-style: none;
   }
 
   .quality-item {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    border-top: 2px solid var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
     display: grid;
-    gap: var(--space-1);
-    padding: var(--space-5);
+    gap: 0.2rem;
+    padding: var(--space-4) 0;
   }
 
   .quality-item strong {
+    align-items: center;
     color: var(--color-text);
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Marcador por cor, sempre acompanhado do texto do título — nunca é o único
+     indicador de nada (o título continua sendo lido normalmente por leitor de tela). */
+  .quality-item strong::before {
+    background: var(--color-accent);
+    border-radius: 999px;
+    content: "";
+    flex-shrink: 0;
+    height: 0.4rem;
+    width: 0.4rem;
+  }
+
+  .quality-item:nth-child(3n + 2) strong::before {
+    background: var(--color-accent-alt);
   }
 
   .quality-item p {
     color: var(--color-muted);
+    margin-left: calc(0.4rem + var(--space-2));
   }
 
-  @media (min-width: 640px) {
-    .quality-grid {
+  @media (min-width: 768px) {
+    .quality-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
 
-  @media (min-width: 1024px) {
-    .quality-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .quality-item:nth-child(odd) {
+      border-right: 1px solid var(--color-border);
+      padding-right: var(--space-5);
+    }
+
+    .quality-item:nth-child(even) {
+      padding-left: var(--space-5);
     }
   }
 </style>

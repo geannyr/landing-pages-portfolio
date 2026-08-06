@@ -1,3 +1,9 @@
+html {
+  /* Compensa o header sticky ao pular para uma âncora (clique, URL com hash,
+     voltar/avançar do navegador, ClientRouter, foco por teclado) + respiro extra. */
+  scroll-padding-top: calc(var(--header-height) + var(--space-6));
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -54,6 +60,17 @@ p {
 
 .section--alt {
   background: var(--color-bg-alt);
+}
+
+/* Alvos de âncora do header (#projetos, #processo, #qualidade, #contato):
+   garante que o título fique totalmente visível abaixo do header sticky, com
+   o mesmo respiro do scroll-padding-top acima — redundante de propósito, cobre
+   tanto a rolagem para a âncora quanto o scrollIntoView usado no foco por teclado. */
+#projetos,
+#processo,
+#qualidade,
+#contato {
+  scroll-margin-top: calc(var(--header-height) + var(--space-6));
 }
 
 .eyebrow {
@@ -116,8 +133,8 @@ p {
 }
 
 .button:hover {
-  background: var(--color-accent-strong);
-  border-color: var(--color-accent-strong);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 
@@ -155,8 +172,8 @@ a[aria-disabled="true"] {
 }
 
 .status-badge--done {
-  background: rgba(139, 246, 178, 0.14);
-  color: #7ee6a6;
+  background: color-mix(in srgb, var(--color-accent-alt) 20%, transparent);
+  color: var(--color-accent-alt);
 }
 
 .status-badge--planned {
@@ -202,4 +219,33 @@ a[aria-disabled="true"] {
   color: var(--color-muted);
   font-size: 1.05rem;
   max-width: 60ch;
+}
+
+/* Entrada suave ao rolar (src/scripts/reveal-on-scroll.ts).
+   Visível por padrão: só fica oculto depois que .js-reveal é confirmado no <html>
+   (script síncrono no <head>, só roda se IntersectionObserver existir) — sem JS,
+   sem suporte a IO ou com prefers-reduced-motion, o conteúdo nunca fica invisível. */
+.reveal {
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none !important;
+  }
+
+  .js-reveal .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

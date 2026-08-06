@@ -1,5 +1,6 @@
 ---
 import { withBase } from "../utils/url";
+import { profile } from "../data/profile";
 
 const projectsAnchor = `${withBase("")}#projetos`;
 ---
@@ -7,48 +8,56 @@ const projectsAnchor = `${withBase("")}#projetos`;
 <section class="hero" id="inicio" aria-labelledby="hero-title">
   <div class="hero__glow" aria-hidden="true"></div>
   <div class="container hero__grid">
-    <div class="hero__content">
-      <p class="eyebrow">Portfólio de front-end</p>
+    <div class="hero__content reveal">
+      <p class="eyebrow">Por Geanny Rodrigues</p>
       <h1 id="hero-title">Landing pages criadas para converter, comunicar e performar.</h1>
       <p class="hero__lead">
-        Uma coleção de experiências digitais desenvolvidas com diferentes stacks, segmentos e objetivos, com atenção a
-        design, acessibilidade e qualidade técnica.
+        Um catálogo de landing pages construídas com stacks diferentes para cada segmento, com foco em conversão,
+        acessibilidade, responsividade e qualidade técnica de ponta a ponta.
+      </p>
+      <p class="hero__context">
+        <span class="hero__context-marker" aria-hidden="true"></span>
+        {profile.professionalTitle} com experiência em ERP, integrações, sistemas financeiros e interfaces digitais.
       </p>
       <div class="hero__actions">
         <a class="button" href={projectsAnchor}>Explorar projetos</a>
-        <a class="button button--secondary" data-contact="github" aria-disabled="true">Ver código no GitHub</a>
+        <a class="button button--secondary" data-contact="repositoryUrl" aria-disabled="true">Ver código no GitHub</a>
       </div>
     </div>
 
-    <div class="hero__visual" aria-hidden="true">
+    <div class="hero__visual reveal" style="transition-delay: 120ms" aria-hidden="true">
       <div class="hero__panel hero__panel--back bg-grid"></div>
       <div class="hero__panel hero__panel--front">
-        <div class="hero__panel-bar">
-          <span></span><span></span><span></span>
+        <div class="hero__stack-tags">
+          <span>HTML</span><span>CSS</span><span>JS</span><span>Astro</span>
         </div>
-        <div class="hero__panel-block hero__panel-block--wide"></div>
-        <div class="hero__panel-row">
-          <div class="hero__panel-block"></div>
-          <div class="hero__panel-block"></div>
+        <div class="hero__layout-block hero__layout-block--hero"></div>
+        <div class="hero__layout-row">
+          <div class="hero__layout-block"></div>
+          <div class="hero__layout-block hero__layout-block--cta"></div>
         </div>
-        <div class="hero__panel-block hero__panel-block--accent"></div>
+      </div>
+      <div class="hero__panel hero__panel--mobile">
+        <span></span><span></span><span></span>
       </div>
       <div class="hero__chip hero__chip--one">Acessível</div>
-      <div class="hero__chip hero__chip--two">Performático</div>
+      <div class="hero__chip hero__chip--two">Responsivo</div>
     </div>
   </div>
 </section>
 
 <style>
   .hero {
+    align-items: center;
+    display: flex;
     overflow: hidden;
-    padding-top: var(--space-8);
+    padding: var(--space-8) 0;
     position: relative;
   }
 
   .hero__glow {
-    background: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22), transparent 55%),
-      radial-gradient(circle at 85% 0%, rgba(96, 165, 250, 0.14), transparent 50%);
+    background: radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 55%),
+      radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--color-accent-alt) 12%, transparent), transparent 50%);
     inset: 0;
     position: absolute;
     z-index: 0;
@@ -57,7 +66,12 @@ const projectsAnchor = `${withBase("")}#projetos`;
   .hero__grid {
     display: grid;
     gap: var(--space-8);
+    /* .hero é flex agora (para centralizar verticalmente); sem isso, o item flex
+       herda min-width:auto e recusa encolher abaixo do conteúdo, causando
+       overflow horizontal. */
+    min-width: 0;
     position: relative;
+    width: 100%;
     z-index: 1;
   }
 
@@ -70,6 +84,23 @@ const projectsAnchor = `${withBase("")}#projetos`;
     color: var(--color-muted-strong);
     font-size: 1.1rem;
     max-width: 56ch;
+  }
+
+  /* Discreta de propósito: contexto profissional, não compete com o h1. */
+  .hero__context {
+    align-items: center;
+    color: var(--color-muted);
+    display: flex;
+    font-size: 0.9rem;
+    gap: var(--space-2);
+    max-width: 52ch;
+  }
+
+  .hero__context-marker {
+    background: var(--color-accent);
+    flex-shrink: 0;
+    height: 2px;
+    width: 1.25rem;
   }
 
   .hero__actions {
@@ -109,40 +140,77 @@ const projectsAnchor = `${withBase("")}#projetos`;
     padding: var(--space-6);
   }
 
-  .hero__panel-bar {
+  /* Marcadores da própria stack do projeto — não é um dashboard genérico. */
+  .hero__stack-tags {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-2);
   }
 
-  .hero__panel-bar span {
-    background: var(--color-border-strong);
+  .hero__stack-tags span {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 999px;
-    height: 0.6rem;
-    width: 0.6rem;
+    color: var(--color-muted-strong);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.6rem;
+    text-transform: uppercase;
   }
 
-  .hero__panel-block {
+  /* Recorte de layout: um bloco de "hero" e uma linha com um cartão + um CTA,
+     lendo-se como um wireframe de página, não como um gráfico de métricas. */
+  .hero__layout-block {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     height: 3rem;
   }
 
-  .hero__panel-block--wide {
+  .hero__layout-block--hero {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 14%, var(--color-surface)), var(--color-surface));
     height: 6.5rem;
   }
 
-  .hero__panel-row {
+  .hero__layout-row {
     display: grid;
     gap: var(--space-3);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1.4fr 1fr;
   }
 
-  .hero__panel-block--accent {
+  .hero__layout-block--cta {
     background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
     border: 0;
-    height: 2.5rem;
-    width: 45%;
+  }
+
+  /* Recorte mobile do mesmo layout, sobreposto ao painel principal — mostra a
+     variação de composição entre desktop e mobile em vez de um mockup solto. */
+  .hero__panel--mobile {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    bottom: -0.75rem;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    gap: 0.4rem;
+    left: -0.75rem;
+    padding: var(--space-3) var(--space-2);
+    width: 4.25rem;
+    z-index: 2;
+  }
+
+  .hero__panel--mobile span {
+    background: var(--color-surface);
+    border-radius: 999px;
+    display: block;
+    height: 0.4rem;
+    width: 100%;
+  }
+
+  .hero__panel--mobile span:last-child {
+    background: var(--color-accent);
+    width: 60%;
   }
 
   .hero__chip {
@@ -158,8 +226,8 @@ const projectsAnchor = `${withBase("")}#projetos`;
   }
 
   .hero__chip--one {
-    left: -0.5rem;
-    top: 2.5rem;
+    right: 1rem;
+    top: -0.75rem;
   }
 
   .hero__chip--two {
@@ -175,12 +243,22 @@ const projectsAnchor = `${withBase("")}#projetos`;
 
   @media (min-width: 1024px) {
     .hero {
-      padding-top: var(--space-9);
+      padding: var(--space-9) 0;
     }
 
     .hero__grid {
       align-items: center;
       grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+
+  /* Só em telas largas E altas o suficiente: o hero ocupa intencionalmente a
+     primeira área visível abaixo do header, como uma composição completa, sem
+     cortar o início da próxima seção. Em notebooks baixos (ex.: 1440×700) essa
+     regra não entra e o hero cresce naturalmente conforme o conteúdo. */
+  @media (min-width: 1024px) and (min-height: 760px) {
+    .hero {
+      min-height: calc(100svh - var(--header-height));
     }
   }
 </style>

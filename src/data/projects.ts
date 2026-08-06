@@ -53,6 +53,7 @@ export const projects: Project[] = [
     accent: "#55786A",
     previewStyle: "screenshot",
     demoPath: "saude",
+    codeUrl: "https://github.com/geannyr/landing-pages-portfolio/tree/main/saude",
     year: 2026,
     hasDetailPage: true
   },

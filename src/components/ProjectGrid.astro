@@ -7,21 +7,60 @@ interface Props {
 }
 
 const { projects } = Astro.props;
+// A Clínica Plena (única "completed") vira o card de destaque. Se um dia houver
+// mais de um projeto concluído, o primeiro do array assume o destaque — a ordem
+// do DOM nunca muda, só o tamanho visual via CSS.
+const featuredProject = projects.find((project) => project.status === "completed") ?? projects[0];
 ---
 
 <div class="project-grid">
-  {projects.map((project) => <ProjectCard project={project} />)}
+  {projects.map((project, index) => <ProjectCard project={project} featured={project.id === featuredProject.id} index={index} />)}
 </div>
 
 <style>
+  /* Mobile: coluna única, ordem do DOM = ordem visual = ordem de leitura/teclado. */
   .project-grid {
     display: grid;
     gap: var(--space-5);
   }
 
+  /* Tablet: destaque em largura total, secundários em pares de 2 colunas —
+     o último fica sozinho em largura total quando o total é ímpar, sem sobrar
+     espaço vazio ao lado. */
   @media (min-width: 768px) {
     .project-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .project-grid :global(.project-card--featured) {
+      grid-column: span 12;
+    }
+
+    .project-grid :global(.project-card:not(.project-card--featured)) {
+      grid-column: span 6;
+    }
+
+    .project-grid :global(.project-card:not(.project-card--featured):last-child) {
+      grid-column: span 12;
+    }
+  }
+
+  /* Desktop: composição editorial assimétrica — destaque (7/12) ao lado do
+     primeiro secundário (5/12) na primeira linha; os outros dois secundários
+     dividem a segunda linha (6/12 cada). Sem row-span: todos os cards têm a
+     mesma altura natural, sem esticar nenhum artificialmente. */
+  @media (min-width: 1024px) {
+    .project-grid :global(.project-card--featured) {
+      grid-column: span 7;
+    }
+
+    .project-grid :global(.project-card:not(.project-card--featured):nth-child(2)) {
+      grid-column: span 5;
+    }
+
+    .project-grid :global(.project-card:not(.project-card--featured):nth-child(3)),
+    .project-grid :global(.project-card:not(.project-card--featured):nth-child(4)) {
+      grid-column: span 6;
     }
   }
 </style>

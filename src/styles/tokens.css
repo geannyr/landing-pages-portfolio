@@ -1,21 +1,25 @@
 :root {
-  /* Superfícies */
-  --color-bg: #0b0b12;
-  --color-bg-alt: #111119;
-  --color-surface: #16161f;
-  --color-surface-raised: #1b1b26;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
+  /* Superfícies — fundo escuro neutro-quente, progressão sutil de profundidade */
+  --color-bg: #0e0f0d;
+  --color-bg-alt: #151713;
+  --color-surface: #1b1d19;
+  --color-surface-raised: #22241f;
+  --color-border: rgba(241, 239, 232, 0.08);
+  --color-border-strong: rgba(241, 239, 232, 0.16);
 
   /* Texto */
-  --color-text: #f3f2f8;
-  --color-muted: #9a97ac;
-  --color-muted-strong: #c3c1d1;
+  --color-text: #f1efe8;
+  --color-muted: #9a9689;
+  --color-muted-strong: #b8b5ab;
 
-  /* Acento da marca (usado em CTAs, foco, links, título do hero) */
-  --color-accent: #8b5cf6;
-  --color-accent-strong: #a78bfa;
-  --color-on-accent: #ffffff;
+  /* Acentos — champagne como acento principal, verde sálvia como segundo acento
+     (reservado, ex.: status "Concluído"). Contraste validado em AA (ver docs/arquitetura.md). */
+  --color-accent: #c6a978;
+  --color-accent-strong: #d8c29a;
+  --color-accent-hover: #b5985f;
+  --color-accent-alt: #8fa696;
+  /* Texto sobre fundo --color-accent precisa ser escuro: branco sobre champagne reprova AA (1.95:1). */
+  --color-on-accent: var(--color-bg);
 
   /* Tipografia */
   --font-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
@@ -38,10 +42,10 @@
   --radius-xl: 1.75rem;
 
   /* Profundidade — sombras escuras em camadas, sem glow/blur pesado */
-  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 28px rgba(0, 0, 0, 0.45);
-  --shadow-raised: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 20px 45px rgba(0, 0, 0, 0.55);
+  --shadow-card: 0 1px 0 rgba(241, 239, 232, 0.03) inset, 0 12px 28px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 1px 0 rgba(241, 239, 232, 0.05) inset, 0 20px 45px rgba(0, 0, 0, 0.5);
 
-  --max-width: 1240px;
+  --max-width: 1400px;
   --header-height: 68px;
   --transition: 180ms ease;
   --transition-slow: 320ms ease;

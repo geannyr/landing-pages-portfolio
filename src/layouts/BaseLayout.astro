@@ -1,7 +1,9 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { absoluteUrl, asset } from "../utils/url";
+import { profile } from "../data/profile";
 import "../styles/reset.css";
 import "../styles/tokens.css";
 import "../styles/global.css";
@@ -27,11 +29,13 @@ const ogImage = image ? absoluteUrl(image) : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
     <link rel="canonical" href={canonical} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Landing Lab" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
@@ -42,6 +46,16 @@ const ogImage = image ? absoluteUrl(image) : undefined;
     {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     <link rel="icon" href={asset("favicon/favicon.svg")} type="image/svg+xml" />
+
+    <ClientRouter />
+    <script is:inline>
+      // Só entra no estado "oculto antes de revelar" (.js-reveal, ver global.css)
+      // quando o navegador suporta IntersectionObserver — sem isso, o conteúdo
+      // nunca é escondido, então nunca fica permanentemente invisível.
+      if ("IntersectionObserver" in window) {
+        document.documentElement.classList.add("js-reveal");
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -51,5 +65,9 @@ const ogImage = image ? absoluteUrl(image) : undefined;
     </main>
     <Footer />
     <p class="global-status sr-only" aria-live="polite"></p>
+    <script>
+      import "../scripts/reveal-on-scroll";
+      import "../scripts/anchor-scroll";
+    </script>
   </body>
 </html>

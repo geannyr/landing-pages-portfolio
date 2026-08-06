@@ -15,10 +15,11 @@ const countLabel = `${count} ${count === 1 ? "projeto" : "projetos"}`;
 
 <section class="section" id="projetos" aria-labelledby="projetos-title">
   <div class="container">
-    <div class="section-heading">
+    <div class="section-heading reveal">
       <p class="eyebrow">Projetos</p>
+      <h2 id="projetos-title">Cada projeto é um estudo completo, do conceito ao código.</h2>
       <div class="category-heading">
-        <h2 id="projetos-title">{category}</h2>
+        <span class="category-tag">{category}</span>
         <span class="category-count">{countLabel}</span>
       </div>
       <p>{description}</p>
@@ -30,15 +31,25 @@ const countLabel = `${count} ${count === 1 ? "projeto" : "projetos"}`;
 
 <style>
   .category-heading {
-    align-items: baseline;
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
   }
 
+  .category-tag {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-muted-strong);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+  }
+
   .category-count {
     color: var(--color-muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
   }
 </style>

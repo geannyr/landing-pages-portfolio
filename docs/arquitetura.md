@@ -85,6 +85,52 @@ repositório (a própria pasta `saude/`), sem cópia duplicada versionada no Git
 > gerado ou copiado). Não há segredos na raiz do repositório (`.env` já é
 > protegido pelo próprio Vite).
 
+## Identidade visual
+
+Paleta escura neutro-quente (fundo `#0e0f0d`) com acento champagne (`#c6a978`) e um
+segundo acento em verde sálvia (`#8fa696`), definidos em `src/styles/tokens.css`.
+Todos os pares texto/fundo foram validados em contraste AA (WCAG); texto sobre o
+acento champagne usa cor escura (`--color-on-accent: var(--color-bg)`) porque
+branco sobre champagne reprova AA (1.95:1). O catálogo usa uma composição bento
+assimétrica (`ProjectGrid.astro`): a Clínica Plena (único projeto concluído) ganha
+mais largura via `grid-column`, sem alterar a ordem do DOM — a ordem de leitura,
+teclado e visual (em telas pequenas) é sempre Clínica Plena → SaaS → Consultoria →
+Educação.
+
+## Entrada suave (scroll reveal)
+
+`src/scripts/reveal-on-scroll.ts` anima a entrada de cards e cabeçalhos de seção
+(`.reveal`) com `IntersectionObserver`. Pontos importantes da implementação:
+
+- Roda em `astro:page-load` (dispara na carga inicial e depois de cada navegação
+  do `ClientRouter`), não em `DOMContentLoaded` — que só dispararia uma vez.
+- Desconecta o observer anterior antes de criar um novo a cada `astro:page-load`,
+  evitando observers acumulados entre navegações.
+- O estado oculto só existe quando `<html>` tem a classe `js-reveal`, adicionada
+  por um script síncrono no `<head>` (`BaseLayout.astro`) e só quando
+  `IntersectionObserver` existe. Sem JavaScript, sem esse suporte, ou com
+  `prefers-reduced-motion: reduce`, o conteúdo nunca fica oculto — visível por
+  padrão é a regra, o "hidden-until-revealed" é a exceção condicional.
+
+## View Transitions (Astro `ClientRouter`)
+
+`BaseLayout.astro` inclui `<ClientRouter />` (`astro:transitions`), habilitando
+navegação SPA com transição suave entre páginas do próprio Astro. Escopo
+deliberadamente limitado:
+
+- Transição compartilhada (`transition:name`) existe **somente** entre o preview
+  do card da Clínica Plena na homepage e o preview equivalente em
+  `/projetos/clinica-plena/` — os outros três cards (planejados, sem página de
+  detalhes) não recebem nome de transição.
+- Qualquer link para `saude/` (card "Ver projeto" e botão "Ver demonstração" na
+  página de detalhes) tem o atributo `data-astro-reload`, que faz o `ClientRouter`
+  ignorá-lo e realizar uma navegação completa de documento — `saude/` é um projeto
+  vanilla independente, fora do roteador do Astro, e não participa de nenhuma
+  transição coordenada.
+- Sem JavaScript ou em navegador sem suporte à View Transitions API, todos os
+  links continuam funcionando como navegação HTML normal — o `ClientRouter`
+  degrada de forma transparente por design do Astro.
+
 ## Rotas e base path
 
 Todas as URLs internas passam por `src/utils/url.ts`, que lê `BASE_URL`/`SITE` do
