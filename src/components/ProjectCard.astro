@@ -43,54 +43,85 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
     screenshotAlt={detail?.screenshotAlt}
   />
 
-  <div class="project-card__body">
-    <div class="project-card__meta">
-      <span class:list={["status-badge", isCompleted ? "status-badge--done" : "status-badge--planned"]}>
-        {isCompleted ? "Concluído" : "Planejado"}
-      </span>
-      <span class="project-card__segment">{project.segment}</span>
-    </div>
-
-    {featured && <p class="project-card__flag">Case em destaque</p>}
-
-    <h3>{project.name}</h3>
-    <p class="project-card__description">{project.description}</p>
-
-    {
-      isCompleted ? (
-        <>
+  {
+    featured ? (
+      // Composição própria do case em destaque: nada de badge + selo soltos —
+      // uma única linha editorial ("Concluído · Case em destaque"), uma régua
+      // de acento em sálvia e uma hierarquia de ações clara (principal/secundária/terciária).
+      <div class="project-card__body project-card__body--featured">
+        <div class="project-card__accent-rule" aria-hidden="true" />
+        <div class="project-card__content">
+          <p class="project-card__eyebrow">Concluído · Case em destaque</p>
+          <h3>{project.name}</h3>
+          <p class="project-card__description">{project.description}</p>
           <p class="project-card__goal"><strong>Objetivo:</strong> {project.goal}</p>
-          <ul class="tag-list">
-            {project.highlights.slice(0, 3).map((item) => <li>{item}</li>)}
+          <ul class="tag-list tag-list--quiet">
+            {project.highlights.slice(0, 2).map((item) => <li>{item}</li>)}
           </ul>
           <div class="project-card__actions">
             {demoHref && (
               // data-astro-reload: navegação completa e não interceptada pelo ClientRouter —
               // saude/ é um documento vanilla independente, fora do roteador do Astro.
-              <a class="text-link" href={demoHref} data-astro-reload>
+              <a class="cta-primary" href={demoHref} data-astro-reload>
                 Ver demonstração<span aria-hidden="true">→</span>
               </a>
             )}
             {detailHref && <a class="text-link text-link--muted" href={detailHref}>Ver case</a>}
             {project.codeUrl && (
-              <a class="text-link text-link--muted" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
+              <a class="text-link text-link--subtle" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
                 Ver código
               </a>
             )}
           </div>
-        </>
-      ) : (
-        <>
-          <p class="project-card__label">Destaques previstos</p>
-          <ul class="tag-list">
-            {project.highlights.slice(0, 2).map((item) => <li>{item}</li>)}
-          </ul>
-          <p class="project-card__stack">Stack prevista: {project.stack.join(", ")}</p>
-          <p class="project-card__note">{plannedNote}</p>
-        </>
-      )
-    }
-  </div>
+        </div>
+      </div>
+    ) : (
+      <div class="project-card__body">
+        <div class="project-card__meta">
+          <span class:list={["status-badge", isCompleted ? "status-badge--done" : "status-badge--planned"]}>
+            {isCompleted ? "Concluído" : "Planejado"}
+          </span>
+          <span class="project-card__segment">{project.segment}</span>
+        </div>
+
+        <h3>{project.name}</h3>
+        <p class="project-card__description">{project.description}</p>
+
+        {
+          isCompleted ? (
+            <>
+              <p class="project-card__goal"><strong>Objetivo:</strong> {project.goal}</p>
+              <ul class="tag-list">
+                {project.highlights.slice(0, 2).map((item) => <li>{item}</li>)}
+              </ul>
+              <div class="project-card__actions">
+                {demoHref && (
+                  <a class="text-link" href={demoHref} data-astro-reload>
+                    Ver demonstração<span aria-hidden="true">→</span>
+                  </a>
+                )}
+                {detailHref && <a class="text-link text-link--muted" href={detailHref}>Ver case</a>}
+                {project.codeUrl && (
+                  <a class="text-link text-link--subtle" href={project.codeUrl} target="_blank" rel="noopener noreferrer">
+                    Ver código
+                  </a>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <p class="project-card__label">Destaques previstos</p>
+              <ul class="tag-list">
+                {project.highlights.slice(0, 2).map((item) => <li>{item}</li>)}
+              </ul>
+              <p class="project-card__stack">Stack prevista: {project.stack.join(", ")}</p>
+              <p class="project-card__note">{plannedNote}</p>
+            </>
+          )
+        }
+      </div>
+    )
+  }
 </article>
 
 <style>
@@ -118,8 +149,13 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
     border-style: dashed;
   }
 
+  /* Acabamento exclusivo do case em destaque: borda com um leve tom do
+     acento do projeto e sombra em duas camadas (contato + ambiente) para dar
+     profundidade sem virar glow — a cor da sombra continua neutra, só a
+     borda recebe o acento. */
   .project-card--featured {
-    box-shadow: var(--shadow-raised);
+    border-color: color-mix(in srgb, var(--accent) 24%, var(--color-border-strong));
+    box-shadow: var(--shadow-card), 0 24px 44px -28px rgba(0, 0, 0, 0.55);
   }
 
   .project-card__body {
@@ -128,12 +164,98 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
     padding: var(--space-4);
   }
 
-  .project-card--featured .project-card__body {
+  /* Composição do case em destaque: régua vertical em sálvia (o "acento
+     visual exclusivo") ao lado de um único bloco de conteúdo — menos "ficha
+     técnica empilhada", mais coluna editorial única. */
+  .project-card__body--featured {
+    column-gap: var(--space-4);
+    display: grid;
+    grid-template-columns: 3px 1fr;
     padding: var(--space-5);
   }
 
-  .project-card--featured h3 {
-    font-size: 1.4rem;
+  .project-card__accent-rule {
+    background: var(--accent);
+    border-radius: 999px;
+  }
+
+  .project-card__content {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .project-card__content h3 {
+    font-size: 1.55rem;
+  }
+
+  .project-card__eyebrow {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Descrição e objetivo ficam mais discretos no destaque — apoio ao nome,
+     não conteúdo em pé de igualdade com ele. */
+  .project-card__content .project-card__description {
+    color: var(--color-muted);
+    font-size: 0.92rem;
+  }
+
+  .project-card__content .project-card__goal {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  /* Tags como apoio silencioso: legenda com separador, igual à composição
+     do preview — não competem visualmente com nome/descrição/ação. */
+  .tag-list--quiet {
+    color: var(--color-muted);
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tag-list--quiet li {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    display: inline;
+    padding: 0;
+  }
+
+  .tag-list--quiet li:not(:last-child)::after {
+    color: var(--color-border-strong);
+    content: "·";
+    margin: 0 0.45em;
+  }
+
+  /* CTA principal do destaque: botão editorial (fundo leve + borda), não um
+     botão sólido pesado — mas visivelmente mais forte que os links ao lado. */
+  .cta-primary {
+    align-items: center;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    display: inline-flex;
+    font-weight: 800;
+    gap: 0.35rem;
+    padding: 0.5rem 0.9rem;
+    text-decoration: none;
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  }
+
+  .cta-primary:hover {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
   }
 
   .tag-list {
@@ -143,14 +265,6 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
   .tag-list li {
     font-size: 0.76rem;
     padding: 0.22rem 0.6rem;
-  }
-
-  .project-card__flag {
-    color: var(--accent);
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
   }
 
   .project-card__label {
@@ -224,6 +338,22 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
   .text-link--muted {
     color: var(--color-muted-strong);
     font-weight: 700;
+    text-decoration-color: var(--color-border-strong);
+  }
+
+  /* Ação terciária: mesma família visual, mais discreta — sem negrito extra,
+     um tom mais claro e sublinhado só ao focar/passar o mouse. */
+  .text-link--subtle {
+    color: var(--color-muted);
+    font-size: 0.9em;
+    font-weight: 600;
+    text-decoration-color: transparent;
+    transition: text-decoration-color var(--transition), color var(--transition);
+  }
+
+  .text-link--subtle:hover,
+  .text-link--subtle:focus-visible {
+    color: var(--color-muted-strong);
     text-decoration-color: var(--color-border-strong);
   }
 
