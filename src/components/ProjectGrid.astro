@@ -21,46 +21,27 @@ const featuredProject = projects.find((project) => project.status === "completed
   /* Mobile: coluna única, ordem do DOM = ordem visual = ordem de leitura/teclado. */
   .project-grid {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
-  /* Tablet: destaque em largura total, secundários em pares de 2 colunas —
-     o último fica sozinho em largura total quando o total é ímpar, sem sobrar
-     espaço vazio ao lado. */
+  /* Tablet: grade simples de 2 colunas, todos os cards com o mesmo peso
+     visual — a Clínica Plena já se distingue pelo selo "Case em destaque" e
+     pelo preview editorial, sem precisar de uma linha inteira só para ela. */
   @media (min-width: 768px) {
     .project-grid {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-    }
-
-    .project-grid :global(.project-card--featured) {
-      grid-column: span 12;
-    }
-
-    .project-grid :global(.project-card:not(.project-card--featured)) {
-      grid-column: span 6;
-    }
-
-    .project-grid :global(.project-card:not(.project-card--featured):last-child) {
-      grid-column: span 12;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  /* Desktop: composição editorial assimétrica — destaque (7/12) ao lado do
-     primeiro secundário (5/12) na primeira linha; os outros dois secundários
-     dividem a segunda linha (6/12 cada). Sem row-span: todos os cards têm a
-     mesma altura natural, sem esticar nenhum artificialmente. */
-  @media (min-width: 1024px) {
-    .project-grid :global(.project-card--featured) {
-      grid-column: span 7;
-    }
-
-    .project-grid :global(.project-card:not(.project-card--featured):nth-child(2)) {
-      grid-column: span 5;
-    }
-
-    .project-grid :global(.project-card:not(.project-card--featured):nth-child(3)),
-    .project-grid :global(.project-card:not(.project-card--featured):nth-child(4)) {
-      grid-column: span 6;
+  /* Desktop largo: grade de 3 colunas iguais — reduz a sensação de "2 cards
+     gigantes por linha" e deixa a Clínica Plena, a SaaS e a Consultoria na
+     mesma linha (a Clínica se distingue pelo selo/preview, não pelo tamanho
+     do grid). A Educação fica sozinha na segunda linha, do mesmo tamanho dos
+     demais: esticá-la para preencher a linha deixaria o preview desproporcionalmente
+     alto — o oposto do que esta rodada busca. */
+  @media (min-width: 1200px) {
+    .project-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>

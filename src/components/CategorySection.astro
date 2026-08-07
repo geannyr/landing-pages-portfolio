@@ -30,6 +30,13 @@ const countLabel = `${count} ${count === 1 ? "projeto" : "projetos"}`;
 </section>
 
 <style>
+  /* Só reduz o respiro do cabeçalho desta seção (escopo do componente via
+     Astro) — .section-heading continua com o valor global nas outras seções. */
+  .section-heading {
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
   .category-heading {
     align-items: center;
     display: flex;

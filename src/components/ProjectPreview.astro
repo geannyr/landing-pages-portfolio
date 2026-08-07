@@ -18,9 +18,18 @@ interface Props {
 const { style, accent, label, segment, transitionName, slug, screenshotAlt } = Astro.props;
 const hasScreenshot = Boolean(slug && screenshotAlt && hasProjectScreenshot(slug));
 const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undefined;
+// Clínica Plena é o único projeto concluído do catálogo: em vez do fallback
+// abstrato genérico, recebe uma composição própria inspirada na landing real
+// (saude/) enquanto não houver uma captura de tela de verdade.
+const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
 ---
 
-<div class="preview" style={`--accent: ${accent};`} aria-hidden={hasScreenshot ? undefined : "true"} transition:name={transitionName}>
+<div
+  class:list={["preview", { "preview--clinica": isClinicaPlena }]}
+  style={`--accent: ${accent};`}
+  aria-hidden={hasScreenshot ? undefined : "true"}
+  transition:name={transitionName}
+>
   {
     hasScreenshot && screenshotUrl ? (
       <img
@@ -32,16 +41,49 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
         loading="lazy"
         decoding="async"
       />
-    ) : (
+    ) : !isClinicaPlena ? (
       <>
         <div class="preview__texture" aria-hidden="true" />
         <span class="preview__window" aria-hidden="true"><span></span><span></span><span></span></span>
       </>
+    ) : null
+  }
+
+  {
+    isClinicaPlena && (
+      <div class="preview__body preview__body--clinica">
+        <div class="cp-topbar">
+          <span class="cp-mark">CP</span>
+          <span class="cp-brand">Clínica Plena</span>
+        </div>
+        <div class="cp-main">
+          <div class="cp-copy">
+            <p class="cp-headline">Cuidado integrado para viver com mais equilíbrio.</p>
+            <span class="cp-cta">Agendar</span>
+            <ul class="cp-tags">
+              <li>Psicologia</li>
+              <li>Nutrição</li>
+              <li>Fisioterapia</li>
+            </ul>
+          </div>
+          <div class="cp-panel">
+            <span class="cp-panel__blob" />
+            <span class="cp-panel__dot" />
+            <div class="cp-panel__card">
+              <span class="cp-panel__icon" />
+              <span class="cp-panel__label">Plano de cuidado</span>
+              <ul class="cp-panel__list">
+                <li /><li /><li />
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 
   {
-    !hasScreenshot && style === "screenshot" && (
+    !hasScreenshot && !isClinicaPlena && style === "screenshot" && (
       <div class="preview__body preview__body--screenshot">
         <div class="preview__site-bar">
           <span class="preview__site-mark" />
@@ -120,7 +162,7 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
 
 <style>
   .preview {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 7.5;
     background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, var(--color-surface-raised)), var(--color-surface) 85%);
     border-bottom: 1px solid var(--color-border);
     overflow: hidden;
@@ -128,7 +170,7 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
   }
 
   .preview__image {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 7.5;
     height: 100%;
     object-fit: cover;
     width: 100%;
@@ -175,7 +217,7 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
 
   .preview__body {
     height: 100%;
-    padding: var(--space-6) var(--space-5) var(--space-4);
+    padding: var(--space-4) var(--space-5) var(--space-3);
     position: relative;
     width: 100%;
     z-index: 1;
@@ -184,7 +226,7 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
   /* screenshot */
   .preview__body--screenshot {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
   .preview__site-bar {
@@ -209,14 +251,14 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
 
   .preview__site-hero {
     display: grid;
-    gap: var(--space-2);
-    margin-top: var(--space-2);
+    gap: var(--space-1);
+    margin-top: var(--space-1);
   }
 
   .preview__site-title {
     background: color-mix(in srgb, var(--color-text) 30%, transparent);
     border-radius: var(--radius-sm);
-    height: 1rem;
+    height: 0.85rem;
     width: 80%;
   }
 
@@ -233,14 +275,14 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
     background: color-mix(in srgb, var(--accent) 30%, transparent);
     border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
     border-radius: 999px;
-    height: 1.1rem;
+    height: 0.9rem;
     width: 22%;
   }
 
   .preview__site-cta {
     background: var(--accent);
     border-radius: var(--radius-sm);
-    height: 1.6rem;
+    height: 1.3rem;
     margin-top: var(--space-1);
     width: 34%;
   }
@@ -255,7 +297,7 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
   /* dashboard */
   .preview__body--dashboard {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
     grid-template-columns: 24% 1fr;
     height: 100%;
   }
@@ -265,8 +307,8 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
     border-radius: var(--radius-sm);
     display: grid;
     align-content: start;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-2);
+    gap: var(--space-1);
+    padding: var(--space-2);
   }
 
   .preview__sidebar span {
@@ -278,20 +320,20 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
 
   .preview__main {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-1);
     grid-template-rows: auto 1fr;
   }
 
   .preview__stat-row {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-1);
   }
 
   .preview__stat {
     background: var(--color-surface-raised);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    height: 1.7rem;
+    height: 1.3rem;
     flex: 1;
   }
 
@@ -301,8 +343,8 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     display: flex;
-    gap: var(--space-2);
-    padding: var(--space-3);
+    gap: var(--space-1);
+    padding: var(--space-2);
   }
 
   .preview__chart span {
@@ -315,27 +357,27 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
   /* editorial */
   .preview__body--editorial {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-1);
   }
 
   .preview__monogram {
     background: color-mix(in srgb, var(--accent) 45%, var(--color-surface-raised));
     border-radius: 999px;
-    height: 1.6rem;
-    margin-bottom: var(--space-1);
-    width: 1.6rem;
+    height: 1.3rem;
+    margin-bottom: 0;
+    width: 1.3rem;
   }
 
   .preview__block {
     background: color-mix(in srgb, var(--color-text) 16%, var(--color-surface-raised));
     border-radius: var(--radius-sm);
-    height: 0.8rem;
+    height: 0.7rem;
     width: 100%;
   }
 
   .preview__block--title {
     background: color-mix(in srgb, var(--accent) 45%, var(--color-surface-raised));
-    height: 1.4rem;
+    height: 1.1rem;
     width: 65%;
   }
 
@@ -346,27 +388,27 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
   .preview__rule {
     background: var(--color-border);
     height: 1px;
-    margin: var(--space-1) 0;
+    margin: 2px 0;
     width: 100%;
   }
 
   .preview__columns {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-1);
     grid-template-columns: repeat(3, 1fr);
   }
 
   /* course */
   .preview__body--course {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
     grid-template-rows: 1fr auto;
     height: 100%;
   }
 
   .preview__course-row {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -398,5 +440,210 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
     display: block;
     height: 100%;
     width: 62%;
+  }
+
+  /* Clínica Plena — interpretação visual (não importada) da paleta e da
+     composição de saude/: creme quente, sálvia profunda, terracota discreta
+     e título serifado. Escala só com rem/% para caber de 320 a 1920px. */
+  .preview--clinica {
+    --cp-bg: #fbf7f0;
+    --cp-bg-alt: #f3ede2;
+    --cp-sage: #4a6558;
+    --cp-sage-dark: #2c4038;
+    --cp-terracotta: #c98168;
+    --cp-ink: #2b2a26;
+    --cp-muted: #6b6558;
+    background: linear-gradient(160deg, var(--cp-bg) 0%, var(--cp-bg-alt) 100%);
+    container-type: inline-size;
+  }
+
+  .preview__body--clinica {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: var(--space-3);
+  }
+
+  .cp-topbar {
+    align-items: center;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .cp-mark {
+    align-items: center;
+    background: var(--cp-sage-dark);
+    border-radius: 999px;
+    color: var(--cp-bg);
+    display: flex;
+    flex-shrink: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.5rem;
+    font-weight: 700;
+    height: 0.95rem;
+    justify-content: center;
+    width: 0.95rem;
+  }
+
+  .cp-brand {
+    color: var(--cp-sage-dark);
+    font-size: 0.55rem;
+    font-weight: 700;
+  }
+
+  .cp-main {
+    display: flex;
+    flex: 1;
+    gap: 0.6rem;
+    min-height: 0;
+  }
+
+  .cp-copy {
+    display: flex;
+    flex: 1.6;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .cp-headline {
+    color: var(--cp-sage-dark);
+    display: -webkit-box;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(0.68rem, 4.5cqi, 0.92rem);
+    font-weight: 700;
+    line-height: 1.2;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .cp-cta {
+    background: var(--cp-sage-dark);
+    border-radius: var(--radius-sm);
+    color: var(--cp-bg);
+    font-size: 0.56rem;
+    font-weight: 700;
+    padding: 0.22rem 0.5rem;
+    width: fit-content;
+  }
+
+  .cp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    margin-top: auto;
+    padding: 0;
+  }
+
+  .cp-tags li {
+    background: var(--cp-bg);
+    border: 1px solid color-mix(in srgb, var(--cp-sage-dark) 20%, transparent);
+    border-radius: 999px;
+    color: var(--cp-muted);
+    font-size: 0.46rem;
+    font-weight: 600;
+    padding: 0.1rem 0.35rem;
+  }
+
+  .cp-panel {
+    align-items: center;
+    display: flex;
+    flex: 0.85;
+    justify-content: center;
+    min-width: 0;
+    position: relative;
+  }
+
+  .cp-panel__blob {
+    background: color-mix(in srgb, var(--cp-terracotta) 55%, transparent);
+    border-radius: 999px;
+    height: 68%;
+    opacity: 0.35;
+    position: absolute;
+    right: 6%;
+    top: 4%;
+    transition: transform var(--transition-slow, 250ms ease);
+    width: 68%;
+  }
+
+  .cp-panel__dot {
+    background: var(--cp-terracotta);
+    border-radius: 999px;
+    bottom: 6%;
+    height: 14%;
+    left: 4%;
+    position: absolute;
+    width: 14%;
+  }
+
+  .cp-panel__card {
+    background: #fffdf9;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0.4rem 0.9rem rgba(43, 42, 38, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.4rem;
+    position: relative;
+    transition: transform var(--transition-slow, 250ms ease);
+    width: 78%;
+  }
+
+  .cp-panel__icon {
+    background: color-mix(in srgb, var(--cp-sage) 22%, transparent);
+    border-radius: 999px;
+    height: 0.75rem;
+    width: 0.75rem;
+  }
+
+  .cp-panel__label {
+    color: var(--cp-sage-dark);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.5rem;
+    font-weight: 700;
+  }
+
+  .cp-panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.16rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cp-panel__list li {
+    background: color-mix(in srgb, var(--cp-ink) 16%, transparent);
+    border-radius: 999px;
+    height: 0.24rem;
+    width: 70%;
+  }
+
+  .cp-panel__list li:nth-child(2) {
+    background: var(--cp-terracotta);
+    width: 55%;
+  }
+
+  .preview--clinica:hover .cp-panel__card {
+    transform: translateY(-2px);
+  }
+
+  .preview--clinica:hover .cp-panel__blob {
+    transform: translate(2px, -2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cp-panel__card,
+    .cp-panel__blob {
+      transition: none;
+    }
+
+    .preview--clinica:hover .cp-panel__card,
+    .preview--clinica:hover .cp-panel__blob {
+      transform: none;
+    }
   }
 </style>

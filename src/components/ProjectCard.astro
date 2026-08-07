@@ -55,13 +55,13 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
 
     <h3>{project.name}</h3>
     <p class="project-card__description">{project.description}</p>
-    <p class="project-card__goal"><strong>Objetivo:</strong> {project.goal}</p>
 
     {
       isCompleted ? (
         <>
+          <p class="project-card__goal"><strong>Objetivo:</strong> {project.goal}</p>
           <ul class="tag-list">
-            {project.highlights.map((item) => <li>{item}</li>)}
+            {project.highlights.slice(0, 3).map((item) => <li>{item}</li>)}
           </ul>
           <div class="project-card__actions">
             {demoHref && (
@@ -83,7 +83,7 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
         <>
           <p class="project-card__label">Destaques previstos</p>
           <ul class="tag-list">
-            {project.highlights.map((item) => <li>{item}</li>)}
+            {project.highlights.slice(0, 2).map((item) => <li>{item}</li>)}
           </ul>
           <p class="project-card__stack">Stack prevista: {project.stack.join(", ")}</p>
           <p class="project-card__note">{plannedNote}</p>
@@ -124,16 +124,25 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
 
   .project-card__body {
     display: grid;
-    gap: var(--space-3);
-    padding: var(--space-5);
+    gap: var(--space-2);
+    padding: var(--space-4);
   }
 
   .project-card--featured .project-card__body {
-    padding: var(--space-6);
+    padding: var(--space-5);
   }
 
   .project-card--featured h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .tag-list {
+    gap: var(--space-1);
+  }
+
+  .tag-list li {
+    font-size: 0.76rem;
+    padding: 0.22rem 0.6rem;
   }
 
   .project-card__flag {
@@ -154,6 +163,9 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
   .project-card__stack {
     color: var(--color-muted);
     font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .project-card__meta {
@@ -174,6 +186,19 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
     color: var(--color-muted-strong);
   }
 
+  .project-card__description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .project-card__goal {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .project-card__goal strong {
     color: var(--color-muted-strong);
   }
@@ -182,7 +207,7 @@ const plannedNote = plannedNotes[project.id] ?? "Planejado para uma próxima eta
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--space-3);
     margin-top: var(--space-1);
   }
 

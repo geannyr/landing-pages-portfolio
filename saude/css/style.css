@@ -27,9 +27,9 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.4rem, 3vw + 1.8rem, 4.6rem);
+  font-size: clamp(2.4rem, 2.6vw + 1.8rem, 4.1rem);
   letter-spacing: -0.01em;
-  max-width: 13ch;
+  max-width: 14ch;
 }
 
 h2 {
@@ -290,7 +290,7 @@ address {
 
 .button--small {
   min-height: 2.5rem;
-  padding: 0.55rem 0.9rem;
+  padding: 0.6rem 1.05rem;
 }
 
 .text-button {
@@ -326,7 +326,7 @@ address {
 
 .hero__content {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-6);
 }
 
 .eyebrow {
@@ -374,8 +374,11 @@ address {
    substitui o conteúdo de .hero-composition__panel, que já reserva proporção. */
 .hero-composition {
   aspect-ratio: 4 / 5;
-  max-height: 30rem;
+  margin-inline: auto;
+  max-height: 28rem;
+  max-width: 26rem;
   position: relative;
+  width: 100%;
 }
 
 .hero-composition__layer {
@@ -597,22 +600,22 @@ address {
 
 .professionals-grid {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-6);
 }
 
 .professional-card {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .professional-card__avatar {
   align-items: center;
   border-radius: 46% 54% 52% 48% / 52% 48% 54% 46%;
   display: inline-flex;
-  height: 5.5rem;
+  height: 6.25rem;
   justify-content: center;
   transition: transform var(--transition-slow);
-  width: 5.5rem;
+  width: 6.25rem;
 }
 
 .professional-card:hover .professional-card__avatar {
@@ -813,7 +816,12 @@ address {
   min-height: 3.75rem;
   padding: var(--space-4) 0;
   text-align: left;
+  transition: color var(--transition);
   width: 100%;
+}
+
+.faq-item button:hover {
+  color: var(--color-primary);
 }
 
 .faq-item button::after {
@@ -856,8 +864,8 @@ address {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
   display: grid;
-  gap: var(--space-4);
-  padding: var(--space-6);
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-6) var(--space-7);
 }
 
 .form-field {
@@ -867,6 +875,7 @@ address {
 
 label {
   color: var(--color-primary-dark);
+  font-size: 0.92rem;
   font-weight: 750;
 }
 
@@ -874,19 +883,42 @@ input,
 select,
 textarea {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   color: var(--color-text);
-  min-height: 3rem;
-  padding: 0.8rem 0.9rem;
-  transition: border-color var(--transition);
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
   width: 100%;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 0.75;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--color-sage-muted);
 }
 
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
+  background: var(--color-surface);
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%232C4038' stroke-width='1.6'%3E%3Cpath d='M5 8l5 5 5-5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 0.9rem center;
+  background-repeat: no-repeat;
+  background-size: 1.1rem;
+  padding-right: 2.5rem;
 }
 
 textarea {
@@ -895,22 +927,25 @@ textarea {
 }
 
 [aria-invalid="true"] {
+  background: color-mix(in srgb, var(--color-error) 6%, var(--color-bg));
   border-color: var(--color-error);
 }
 
 .field-error {
   color: var(--color-error);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   min-height: 1.3rem;
 }
 
 .form-check {
+  align-items: start;
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-2) var(--space-3);
   grid-template-columns: auto 1fr;
 }
 
 .form-check input {
+  accent-color: var(--color-primary);
   height: 1.25rem;
   margin-top: 0.2rem;
   min-height: auto;
@@ -934,6 +969,7 @@ textarea {
 
 .final-cta {
   background: var(--color-primary-dark);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   color: var(--color-white);
   overflow: hidden;
   padding: var(--space-8) 0;
@@ -985,6 +1021,7 @@ textarea {
 
 .site-footer {
   background: var(--color-text);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-white);
   padding: var(--space-7) 0;
 }
@@ -1087,9 +1124,12 @@ textarea {
   .hero__grid,
   .split,
   .location,
-  .contact,
-  .faq-layout {
+  .contact {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .faq-layout {
+    grid-template-columns: 0.8fr 1.2fr;
   }
 
   .footer-grid {
@@ -1107,7 +1147,7 @@ textarea {
     background: transparent;
     border: 0;
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-5);
     padding: 0;
     position: static;
     transform: none;
@@ -1121,13 +1161,20 @@ textarea {
     font-size: 0.95rem;
   }
 
+  /* Ritmo vertical progressivo: em telas grandes as seções ganham mais
+     respiro entre si (sem exagero — o teto de 6rem evita vazio excessivo em
+     1920px, o piso de 4rem preserva a continuidade com o padrão mobile). */
+  .section {
+    padding: clamp(4rem, 3vw + 2rem, 6rem) 0;
+  }
+
   .hero {
     padding-top: var(--space-8);
   }
 
   .hero__grid {
     align-items: center;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .specialty-grid {
