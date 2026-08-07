@@ -42,7 +42,7 @@
     </header>
 
     <main id="conteudo">
-      <section class="hero section" id="inicio" aria-labelledby="hero-title">
+      <section class="hero section reveal" id="inicio" aria-labelledby="hero-title">
         <div class="container hero__grid">
           <div class="hero__content">
             <p class="eyebrow">Psicologia, nutrição e fisioterapia</p>
@@ -52,48 +52,79 @@
               <button class="button" type="button" data-whatsapp="Olá! Gostaria de agendar um atendimento na Clínica Plena.">Agendar pelo WhatsApp</button>
               <a class="button button--secondary" href="#especialidades">Conhecer especialidades</a>
             </div>
-            <div class="hero__tags" aria-label="Especialidades disponíveis">
-              <span>Psicologia</span>
-              <span>Nutrição</span>
-              <span>Fisioterapia</span>
-            </div>
+            <ul class="hero__tags" aria-label="Especialidades disponíveis">
+              <li>Psicologia</li>
+              <li>Nutrição</li>
+              <li>Fisioterapia</li>
+            </ul>
           </div>
 
-          <div class="hero-card" aria-label="Resumo demonstrativo de atendimento">
-            <div class="hero-card__shape" aria-hidden="true"></div>
-            <p class="hero-card__label">Plano de cuidado</p>
-            <strong>Atendimento com escuta, clareza e integração.</strong>
-            <ul class="hero-card__list">
-              <li>Triagem inicial humanizada</li>
-              <li>Encaminhamento por especialidade</li>
-              <li>Acompanhamento individual</li>
-            </ul>
+          <div class="hero-composition" aria-hidden="true">
+            <div class="hero-composition__layer hero-composition__layer--back"></div>
+            <div class="hero-composition__layer hero-composition__layer--mid"></div>
+            <!-- Estrutura preparada para receber uma fotografia real/licenciada no
+                 futuro: basta substituir o conteúdo de .hero-composition__panel por
+                 um <img> mantendo o aspect-ratio reservado em CSS. -->
+            <div class="hero-composition__panel">
+              <span class="hero-composition__mark">
+                <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <circle cx="24" cy="24" r="16"/>
+                  <circle cx="24" cy="24" r="8"/>
+                </svg>
+              </span>
+              <p class="hero-composition__label">Plano de cuidado</p>
+              <strong class="hero-composition__title">Escuta, clareza e integração em cada etapa.</strong>
+              <ul class="hero-composition__list">
+                <li><span class="hero-composition__dot hero-composition__dot--psicologia"></span>Psicologia</li>
+                <li><span class="hero-composition__dot hero-composition__dot--nutricao"></span>Nutrição</li>
+                <li><span class="hero-composition__dot hero-composition__dot--fisioterapia"></span>Fisioterapia</li>
+              </ul>
+            </div>
+            <div class="hero-composition__accent"></div>
           </div>
         </div>
       </section>
 
       <section class="section" id="especialidades" aria-labelledby="especialidades-title">
         <div class="container">
-          <div class="section-heading">
+          <div class="section-heading reveal">
             <p class="eyebrow">Especialidades</p>
             <h2 id="especialidades-title">Cuidado para diferentes momentos da vida.</h2>
             <p>Escolha uma área e fale com a equipe para receber orientação sobre horários demonstrativos.</p>
           </div>
-          <div class="cards-grid">
-            <article class="service-card">
-              <span class="icon icon--mind" aria-hidden="true"></span>
+          <div class="specialty-grid">
+            <article class="specialty-card specialty-card--psicologia reveal">
+              <span class="specialty-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M8 25a12 12 0 0 1 24 0" stroke-linecap="round"/>
+                  <path d="M13 25a7 7 0 0 1 14 0" stroke-linecap="round"/>
+                  <circle cx="20" cy="25" r="1.5" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
               <h3>Psicologia</h3>
               <p>Acolhimento para questões emocionais, relações, rotina e desenvolvimento pessoal.</p>
               <button class="text-button" type="button" data-whatsapp="Olá! Gostaria de agendar uma consulta demonstrativa de psicologia na Clínica Plena.">Agendar psicologia</button>
             </article>
-            <article class="service-card">
-              <span class="icon icon--nutrition" aria-hidden="true"></span>
+            <article class="specialty-card specialty-card--nutricao reveal">
+              <span class="specialty-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M20 32V17" stroke-linecap="round"/>
+                  <path d="M20 17c0-6 5-10 11-10-1 7-5 11-11 11" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M20 23c0-4-4-7-9-7 1 5 4 8 9 8" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </span>
               <h3>Nutrição</h3>
               <p>Orientação alimentar individualizada para hábitos mais consistentes e sustentáveis.</p>
               <button class="text-button" type="button" data-whatsapp="Olá! Gostaria de agendar uma consulta demonstrativa de nutrição na Clínica Plena.">Agendar nutrição</button>
             </article>
-            <article class="service-card">
-              <span class="icon icon--physio" aria-hidden="true"></span>
+            <article class="specialty-card specialty-card--fisioterapia reveal">
+              <span class="specialty-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M9 29c4-10 12-16 22-14" stroke-linecap="round"/>
+                  <circle cx="31" cy="15" r="2" fill="currentColor" stroke="none"/>
+                  <path d="M9 29c2 2 5 3 8 2" stroke-linecap="round"/>
+                </svg>
+              </span>
               <h3>Fisioterapia</h3>
               <p>Acompanhamento para movimento, prevenção, reabilitação e bem-estar corporal.</p>
               <button class="text-button" type="button" data-whatsapp="Olá! Gostaria de agendar uma consulta demonstrativa de fisioterapia na Clínica Plena.">Agendar fisioterapia</button>
@@ -102,46 +133,64 @@
         </div>
       </section>
 
-      <section class="section section--alt" id="diferenciais" aria-labelledby="diferenciais-title">
+      <section class="section section--alt diffs" id="diferenciais" aria-labelledby="diferenciais-title">
         <div class="container split">
-          <div class="section-heading section-heading--left">
+          <div class="section-heading section-heading--left reveal">
             <p class="eyebrow">Diferenciais</p>
             <h2 id="diferenciais-title">Um percurso de cuidado simples de entender.</h2>
             <p>A experiência foi pensada para quem busca atendimento particular com acolhimento, organização e comunicação clara.</p>
           </div>
-          <div class="feature-list">
-            <div class="feature-item"><strong>Atendimento individualizado</strong><span>Planos ajustados à necessidade de cada pessoa.</span></div>
-            <div class="feature-item"><strong>Integração entre especialidades</strong><span>Olhar multidisciplinar quando fizer sentido para o caso.</span></div>
-            <div class="feature-item"><strong>Ambiente acolhedor</strong><span>Comunicação respeitosa desde o primeiro contato.</span></div>
-            <div class="feature-item"><strong>Agendamento facilitado</strong><span>Solicitação rápida por WhatsApp ou formulário.</span></div>
-          </div>
+          <ul class="diffs-list reveal">
+            <li><strong>Atendimento individualizado</strong><span>Planos ajustados à necessidade de cada pessoa.</span></li>
+            <li><strong>Integração entre especialidades</strong><span>Olhar multidisciplinar quando fizer sentido para o caso.</span></li>
+            <li><strong>Ambiente acolhedor</strong><span>Comunicação respeitosa desde o primeiro contato.</span></li>
+            <li><strong>Agendamento facilitado</strong><span>Solicitação rápida por WhatsApp ou formulário.</span></li>
+          </ul>
         </div>
       </section>
 
       <section class="section" id="profissionais" aria-labelledby="profissionais-title">
         <div class="container">
-          <div class="section-heading">
+          <div class="section-heading reveal">
             <p class="eyebrow">Profissionais</p>
             <h2 id="profissionais-title">Perfis demonstrativos da equipe.</h2>
             <p>Os nomes e perfis abaixo são fictícios, criados apenas para composição visual do projeto.</p>
           </div>
-          <div class="cards-grid">
-            <article class="profile-card">
-              <span class="avatar avatar--one" aria-hidden="true"></span>
+          <div class="professionals-grid">
+            <article class="professional-card reveal">
+              <span class="professional-card__avatar professional-card__avatar--psicologia" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M8 25a12 12 0 0 1 24 0" stroke-linecap="round"/>
+                  <path d="M13 25a7 7 0 0 1 14 0" stroke-linecap="round"/>
+                  <circle cx="20" cy="25" r="1.5" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
               <h3>Marina Azevedo</h3>
-              <p class="profile-card__role">Psicologia</p>
+              <p class="professional-card__role">Psicologia</p>
               <p>Atuação demonstrativa em escuta clínica, rotina emocional e desenvolvimento pessoal.</p>
             </article>
-            <article class="profile-card">
-              <span class="avatar avatar--two" aria-hidden="true"></span>
+            <article class="professional-card reveal">
+              <span class="professional-card__avatar professional-card__avatar--nutricao" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M20 32V17" stroke-linecap="round"/>
+                  <path d="M20 17c0-6 5-10 11-10-1 7-5 11-11 11" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M20 23c0-4-4-7-9-7 1 5 4 8 9 8" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </span>
               <h3>Renata Lima</h3>
-              <p class="profile-card__role">Nutrição</p>
+              <p class="professional-card__role">Nutrição</p>
               <p>Atuação demonstrativa em educação alimentar, hábitos e acompanhamento individual.</p>
             </article>
-            <article class="profile-card">
-              <span class="avatar avatar--three" aria-hidden="true"></span>
+            <article class="professional-card reveal">
+              <span class="professional-card__avatar professional-card__avatar--fisioterapia" aria-hidden="true">
+                <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M9 29c4-10 12-16 22-14" stroke-linecap="round"/>
+                  <circle cx="31" cy="15" r="2" fill="currentColor" stroke="none"/>
+                  <path d="M9 29c2 2 5 3 8 2" stroke-linecap="round"/>
+                </svg>
+              </span>
               <h3>Caio Monteiro</h3>
-              <p class="profile-card__role">Fisioterapia</p>
+              <p class="professional-card__role">Fisioterapia</p>
               <p>Atuação demonstrativa em movimento, prevenção e recuperação funcional.</p>
             </article>
           </div>
@@ -150,40 +199,36 @@
 
       <section class="section section--alt" id="atendimento" aria-labelledby="atendimento-title">
         <div class="container">
-          <div class="section-heading">
+          <div class="section-heading reveal">
             <p class="eyebrow">Como funciona</p>
             <h2 id="atendimento-title">Do primeiro contato ao atendimento.</h2>
           </div>
-          <ol class="steps">
-            <li><span>1</span><strong>Escolha a especialidade</strong><p>Selecione a área mais próxima da sua necessidade.</p></li>
-            <li><span>2</span><strong>Fale com a equipe</strong><p>Envie sua solicitação pelo WhatsApp ou formulário.</p></li>
-            <li><span>3</span><strong>Confirme o horário</strong><p>Combine disponibilidade e formato de atendimento.</p></li>
-            <li><span>4</span><strong>Realize o atendimento</strong><p>Receba acompanhamento individualizado.</p></li>
+          <ol class="process-flow reveal">
+            <li><span class="process-flow__index">1</span><div><strong>Escolha a especialidade</strong><p>Selecione a área mais próxima da sua necessidade.</p></div></li>
+            <li><span class="process-flow__index">2</span><div><strong>Fale com a equipe</strong><p>Envie sua solicitação pelo WhatsApp ou formulário.</p></div></li>
+            <li><span class="process-flow__index">3</span><div><strong>Confirme o horário</strong><p>Combine disponibilidade e formato de atendimento.</p></div></li>
+            <li><span class="process-flow__index">4</span><div><strong>Realize o atendimento</strong><p>Receba acompanhamento individualizado.</p></div></li>
           </ol>
         </div>
       </section>
 
-      <section class="section" id="experiencia" aria-labelledby="experiencia-title">
-        <div class="container experience">
-          <div>
-            <p class="eyebrow">Experiência de atendimento</p>
-            <h2 id="experiencia-title">Uma relação guiada por escuta e respeito.</h2>
-          </div>
-          <div class="experience__text">
-            <p>Na Clínica Plena, a experiência demonstrativa valoriza escuta, clareza, respeito e acompanhamento individual. A proposta institucional é facilitar o entendimento de cada etapa, sem promessas de resultado e sem uso de depoimentos atribuídos a pacientes.</p>
-            <ul class="pill-list">
-              <li>Escuta</li>
-              <li>Clareza</li>
-              <li>Respeito</li>
-              <li>Acompanhamento individual</li>
-            </ul>
-          </div>
+      <section class="section experience" id="experiencia" aria-labelledby="experiencia-title">
+        <div class="container experience__inner reveal">
+          <p class="eyebrow">Experiência de atendimento</p>
+          <h2 id="experiencia-title" class="experience__statement">Uma relação guiada por escuta e respeito, com acompanhamento verdadeiramente individual.</h2>
+          <ul class="experience__pillars">
+            <li>Escuta</li>
+            <li>Clareza</li>
+            <li>Respeito</li>
+            <li>Acompanhamento individual</li>
+          </ul>
+          <p class="experience__note">A proposta institucional é facilitar o entendimento de cada etapa, sem promessas de resultado e sem uso de depoimentos atribuídos a pacientes.</p>
         </div>
       </section>
 
       <section class="section section--alt" id="localizacao" aria-labelledby="localizacao-title">
         <div class="container location">
-          <div class="location__info">
+          <div class="location__info reveal">
             <p class="eyebrow">Localização</p>
             <h2 id="localizacao-title">Atendimento em endereço demonstrativo.</h2>
             <address>
@@ -192,7 +237,7 @@
               Sábado, das 8h às 13h
             </address>
           </div>
-          <div class="map-card" aria-label="Representação visual de localização fictícia">
+          <div class="map-card reveal" aria-label="Representação visual de localização fictícia">
             <span class="map-card__pin" aria-hidden="true"></span>
             <strong>Recife, PE</strong>
             <p>Bloco visual fictício, sem incorporação de mapas externos.</p>
@@ -202,11 +247,11 @@
 
       <section class="section" id="faq" aria-labelledby="faq-title">
         <div class="container faq-layout">
-          <div class="section-heading section-heading--left">
+          <div class="section-heading section-heading--left reveal">
             <p class="eyebrow">FAQ</p>
             <h2 id="faq-title">Perguntas frequentes.</h2>
           </div>
-          <div class="faq-list">
+          <div class="faq-list reveal">
             <div class="faq-item">
               <button type="button" aria-expanded="false" aria-controls="faq-resposta-1" id="faq-pergunta-1">Como faço para agendar?</button>
               <div class="faq-item__content" id="faq-resposta-1" role="region" aria-labelledby="faq-pergunta-1" hidden>Você pode usar os botões de WhatsApp ou preencher o formulário. Nesta versão, os dados são demonstrativos.</div>
@@ -237,13 +282,13 @@
 
       <section class="section section--alt" id="contato" aria-labelledby="contato-title">
         <div class="container contact">
-          <div class="section-heading section-heading--left">
+          <div class="section-heading section-heading--left reveal">
             <p class="eyebrow">Contato</p>
             <h2 id="contato-title">Solicite seu agendamento.</h2>
             <p>O formulário valida os campos no navegador e monta uma mensagem para WhatsApp. Nenhum dado é enviado para servidor.</p>
           </div>
 
-          <form class="contact-form" novalidate>
+          <form class="contact-form reveal" novalidate>
             <div class="form-field">
               <label for="nome">Nome</label>
               <input id="nome" name="nome" type="text" autocomplete="name" required aria-describedby="erro-nome">
@@ -290,6 +335,7 @@
       </section>
 
       <section class="final-cta" aria-labelledby="cta-title">
+        <div class="final-cta__accent" aria-hidden="true"></div>
         <div class="container final-cta__inner">
           <h2 id="cta-title">Comece com uma conversa simples.</h2>
           <p>Solicite um horário demonstrativo e conheça o percurso de cuidado integrado da Clínica Plena.</p>

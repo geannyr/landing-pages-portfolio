@@ -12,13 +12,28 @@ Adultos entre 25 e 55 anos que procuram atendimento particular, acolhedor e prof
 
 ## Identidade visual
 
-- Verde principal: `#55786A`
-- Verde escuro: `#2F5146`
-- Terracota: `#C98168`
-- Fundo principal: `#FAF8F4`
-- Fundo alternativo: `#EEF3EF`
-- Títulos em Georgia
-- Textos e interface com fontes do sistema
+Paleta acolhedora e autoral, validada em contraste AA (WCAG). O terracota tem
+duas variantes: `--color-terracotta` é só decorativo (superfícies, ícones,
+bordas — contraste ~3.3:1, insuficiente para texto pequeno) e
+`--color-terracotta-deep` é a versão validada para texto (eyebrow, links,
+labels — ~5.4:1 sobre o fundo principal).
+
+- Verde sálvia profundo: `#4A6558`
+- Verde escuro: `#2C4038`
+- Verde acinzentado (acento secundário): `#7C8C82`
+- Terracota decorativa: `#C98168`
+- Terracota para texto: `#94553C`
+- Fundo principal: `#FBF7F0`
+- Fundo alternativo: `#F3EDE2`
+- Superfície (cards): `#FFFDF9`
+- Texto grafite: `#2B2A26`
+- Títulos em Georgia (serif), textos e interface em fontes do sistema (sans-serif)
+
+Ícones de especialidade e avatares dos profissionais são SVGs inline
+desenhados especificamente para o projeto (sem ícones de banco genérico,
+sem cruzes/corações/estetoscópios). Os avatares dos profissionais reaproveitam
+o mesmo motivo gráfico da especialidade correspondente, em escala maior —
+diferenciação por composição, não só por cor.
 
 ## Seções
 
@@ -43,6 +58,8 @@ Adultos entre 25 e 55 anos que procuram atendimento particular, acolhedor e prof
 - Validação de formulário no cliente.
 - Montagem de mensagem de WhatsApp.
 - Ano do rodapé atualizado por JavaScript.
+- Entrada suave dos blocos ao rolar a página (`IntersectionObserver`), visível
+  por padrão sem JavaScript e desativada com `prefers-reduced-motion`.
 
 ## Acessibilidade
 

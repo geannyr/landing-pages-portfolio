@@ -1,7 +1,14 @@
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  /* Reserva espaço para o botão flutuante de WhatsApp não cobrir o rodapé em
+     mobile; removido a partir de 768px, onde o botão some do fluxo de leitura
+     principal. */
   padding-bottom: 5.5rem;
 }
 
@@ -15,21 +22,22 @@ h3 {
   color: var(--color-primary-dark);
   font-family: var(--font-heading);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.1;
   margin: 0;
 }
 
 h1 {
-  font-size: clamp(2.45rem, 13vw, 4.8rem);
-  max-width: 11ch;
+  font-size: clamp(2.4rem, 3vw + 1.8rem, 4.6rem);
+  letter-spacing: -0.01em;
+  max-width: 13ch;
 }
 
 h2 {
-  font-size: clamp(2rem, 8vw, 3.2rem);
+  font-size: clamp(1.9rem, 2vw + 1.4rem, 3rem);
 }
 
 h3 {
-  font-size: 1.45rem;
+  font-size: clamp(1.25rem, 0.6vw + 1.1rem, 1.5rem);
 }
 
 p {
@@ -85,12 +93,47 @@ address {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 3px solid var(--color-terracotta-deep);
   outline-offset: 4px;
 }
 
+/* ==========================================================================
+   Entrada suave ao rolar (reveal). Visível por padrão — só é ocultado quando
+   .js-reveal confirma suporte a IntersectionObserver (ver js/main.js). Sem
+   JS, sem suporte, ou com prefers-reduced-motion, o conteúdo nunca some.
+   ========================================================================== */
+
+.reveal {
+  transition: opacity 480ms ease, transform 480ms ease;
+}
+
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none !important;
+  }
+
+  .js-reveal .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Cabeçalho
+   ========================================================================== */
+
 .site-header {
-  background: rgba(250, 248, 244, 0.94);
+  background: rgba(251, 247, 240, 0.94);
   border-bottom: 1px solid var(--color-border);
   min-height: var(--header-height);
   position: sticky;
@@ -123,7 +166,6 @@ address {
   font-size: 0.75rem;
   height: 2.35rem;
   justify-content: center;
-  letter-spacing: 0;
   width: 2.35rem;
 }
 
@@ -206,6 +248,10 @@ address {
   color: var(--color-white);
 }
 
+/* ==========================================================================
+   Botões e links de ação
+   ========================================================================== */
+
 .button {
   align-items: center;
   background: var(--color-primary-dark);
@@ -233,20 +279,40 @@ address {
 
 .button--secondary {
   background: transparent;
-  border-color: var(--color-border);
+  border-color: var(--color-border-strong);
   color: var(--color-primary-dark);
 }
 
 .button--secondary:hover {
   background: var(--color-white);
   border-color: var(--color-primary);
-  color: var(--color-primary-dark);
 }
 
 .button--small {
   min-height: 2.5rem;
   padding: 0.55rem 0.9rem;
 }
+
+.text-button {
+  background: transparent;
+  border: 0;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0;
+  text-decoration-color: var(--color-terracotta);
+  text-decoration-line: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.text-button:hover {
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
 
 .hero {
   overflow: hidden;
@@ -264,7 +330,7 @@ address {
 }
 
 .eyebrow {
-  color: var(--color-accent);
+  color: var(--color-terracotta-deep);
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -272,17 +338,14 @@ address {
 }
 
 .hero__lead,
-.section-heading p,
-.experience__text,
-.contact p {
+.section-heading p {
   color: var(--color-muted);
   font-size: 1.05rem;
-  max-width: 60ch;
+  max-width: 58ch;
 }
 
 .hero__actions,
-.hero__tags,
-.pill-list {
+.hero__tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
@@ -292,69 +355,135 @@ address {
   width: 100%;
 }
 
-.hero__tags span,
-.pill-list li {
+.hero__tags {
+  list-style: none;
+}
+
+.hero__tags li {
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   color: var(--color-primary-dark);
-  list-style: none;
   padding: var(--space-2) var(--space-4);
 }
 
-.hero-card {
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  min-height: 25rem;
-  overflow: hidden;
-  padding: var(--space-6);
+/* Composição do hero: camadas orgânicas sólidas (sem gradiente saturado) +
+   um painel com a "assinatura" da clínica. Nada de mockup de navegador,
+   cruzes, corações ou estetoscópios — profundidade vem de sobreposição de
+   formas, não de blur/glassmorphism. Quando houver fotografia real, ela
+   substitui o conteúdo de .hero-composition__panel, que já reserva proporção. */
+.hero-composition {
+  aspect-ratio: 4 / 5;
+  max-height: 30rem;
   position: relative;
 }
 
-.hero-card__shape {
-  background:
-    radial-gradient(circle at 30% 35%, rgba(201, 129, 104, 0.45), transparent 28%),
-    radial-gradient(circle at 70% 45%, rgba(85, 120, 106, 0.35), transparent 30%),
-    var(--color-bg-alt);
-  border-radius: 54% 46% 44% 56%;
-  height: 13rem;
-  margin-bottom: var(--space-6);
-  width: 100%;
+.hero-composition__layer {
+  border-radius: 54% 46% 42% 58% / 58% 44% 56% 42%;
+  inset: 0;
+  position: absolute;
 }
 
-.hero-card__label {
-  color: var(--color-accent);
-  font-size: 0.85rem;
+.hero-composition__layer--back {
+  background: color-mix(in srgb, var(--color-primary) 22%, var(--color-bg-alt));
+  inset: 6% -4% -4% 6%;
+}
+
+.hero-composition__layer--mid {
+  background: color-mix(in srgb, var(--color-terracotta) 20%, var(--color-bg-alt));
+  inset: -2% 8% 8% -2%;
+  opacity: 0.7;
+}
+
+.hero-composition__panel {
+  aspect-ratio: 4 / 5;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  gap: var(--space-3);
+  align-content: center;
+  inset: 8% 6%;
+  justify-items: start;
+  padding: var(--space-6);
+  position: absolute;
+  text-align: left;
+}
+
+.hero-composition__mark {
+  align-items: center;
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+  border-radius: 999px;
+  color: var(--color-primary-dark);
+  display: inline-flex;
+  height: 3.25rem;
+  justify-content: center;
+  width: 3.25rem;
+}
+
+.hero-composition__label {
+  color: var(--color-terracotta-deep);
+  font-size: 0.8rem;
   font-weight: 750;
-  margin-bottom: var(--space-2);
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.hero-card strong {
+.hero-composition__title {
   color: var(--color-primary-dark);
   display: block;
   font-family: var(--font-heading);
-  font-size: 1.7rem;
-  line-height: 1.15;
-  margin-bottom: var(--space-5);
+  font-size: 1.4rem;
+  line-height: 1.2;
 }
 
-.hero-card__list {
+.hero-composition__list {
   color: var(--color-muted);
   display: grid;
   gap: var(--space-2);
   list-style: none;
+  margin-top: var(--space-2);
 }
 
-.hero-card__list li::before,
-.feature-item::before {
-  color: var(--color-accent);
-  content: "•";
-  font-weight: 900;
-  margin-right: var(--space-2);
+.hero-composition__list li {
+  align-items: center;
+  display: flex;
+  gap: var(--space-2);
 }
+
+.hero-composition__dot {
+  border-radius: 999px;
+  display: inline-block;
+  height: 0.55rem;
+  width: 0.55rem;
+}
+
+.hero-composition__dot--psicologia {
+  background: var(--color-primary);
+}
+
+.hero-composition__dot--nutricao {
+  background: var(--color-terracotta);
+}
+
+.hero-composition__dot--fisioterapia {
+  background: var(--color-primary-dark);
+}
+
+.hero-composition__accent {
+  background: var(--color-terracotta);
+  border-radius: 999px;
+  bottom: -0.75rem;
+  height: 2.75rem;
+  left: -0.75rem;
+  position: absolute;
+  width: 2.75rem;
+}
+
+/* ==========================================================================
+   Títulos de seção
+   ========================================================================== */
 
 .section-heading {
   display: grid;
@@ -364,214 +493,269 @@ address {
   text-align: left;
 }
 
-.cards-grid {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.service-card,
-.profile-card,
-.faq-item,
-.contact-form {
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
-}
-
-.service-card,
-.profile-card {
-  display: grid;
-  gap: var(--space-4);
-  padding: var(--space-5);
-}
-
-.service-card p,
-.profile-card p,
-.steps p,
-.map-card p,
-.site-footer p {
-  color: var(--color-muted);
-}
-
-.icon {
-  background: var(--color-bg-alt);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  height: 3.25rem;
-  position: relative;
-  width: 3.25rem;
-}
-
-.icon::before,
-.icon::after {
-  content: "";
-  position: absolute;
-}
-
-.icon--mind::before {
-  border: 3px solid var(--color-primary);
-  border-radius: 999px 999px 999px 40%;
-  height: 1.6rem;
-  left: 0.85rem;
-  top: 0.65rem;
-  width: 1.45rem;
-}
-
-.icon--mind::after {
-  background: var(--color-accent);
-  border-radius: 999px;
-  height: 0.45rem;
-  left: 1.35rem;
-  top: 1.3rem;
-  width: 0.45rem;
-}
-
-.icon--nutrition::before {
-  background: var(--color-primary);
-  border-radius: 55% 45% 55% 45%;
-  height: 1.75rem;
-  left: 1.25rem;
-  top: 0.75rem;
-  transform: rotate(-22deg);
-  width: 1rem;
-}
-
-.icon--nutrition::after {
-  background: var(--color-accent);
-  border-radius: 999px;
-  height: 1rem;
-  left: 0.95rem;
-  top: 1.3rem;
-  width: 1rem;
-}
-
-.icon--physio::before {
-  border: 3px solid var(--color-primary);
-  border-bottom: 0;
-  border-radius: 999px 999px 0 0;
-  height: 1.2rem;
-  left: 0.75rem;
-  top: 1rem;
-  width: 1.75rem;
-}
-
-.icon--physio::after {
-  background: var(--color-accent);
-  border-radius: 999px;
-  height: 0.5rem;
-  left: 1.35rem;
-  top: 2rem;
-  width: 0.5rem;
-}
-
-.text-button {
-  background: transparent;
-  border: 0;
-  color: var(--color-primary-dark);
-  font-weight: 800;
-  justify-self: start;
-  min-height: 2.75rem;
-  padding: 0;
-  text-decoration-color: var(--color-accent);
-  text-decoration-line: underline;
-  text-underline-offset: 0.25rem;
-}
-
-.text-button:hover {
-  color: var(--color-primary);
-}
-
-.split,
-.location,
-.contact,
-.experience,
-.faq-layout {
+.split {
   display: grid;
   gap: var(--space-6);
 }
 
-.feature-list {
+/* ==========================================================================
+   Especialidades
+   ========================================================================== */
+
+.specialty-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.specialty-card {
+  background: var(--color-surface);
+  border-top: 2px solid var(--card-accent, var(--color-primary));
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-5);
+  transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.specialty-card:hover {
+  box-shadow: var(--shadow-card);
+  transform: translateY(-3px);
+}
+
+.specialty-card--psicologia {
+  --card-accent: var(--color-primary);
+}
+
+.specialty-card--nutricao {
+  --card-accent: var(--color-terracotta);
+}
+
+.specialty-card--fisioterapia {
+  --card-accent: var(--color-primary-dark);
+}
+
+.specialty-card__icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--card-accent) 16%, var(--color-bg));
+  border-radius: 999px;
+  color: var(--card-accent);
+  display: inline-flex;
+  height: 3.25rem;
+  justify-content: center;
+  width: 3.25rem;
+}
+
+.specialty-card p {
+  color: var(--color-muted);
+}
+
+/* ==========================================================================
+   Diferenciais — lista editorial, sem caixas, para não repetir a composição
+   de cards das especialidades.
+   ========================================================================== */
+
+.diffs-list {
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  list-style: none;
+}
+
+.diffs-list li {
+  border-bottom: 1px solid var(--color-border);
+  display: grid;
+  gap: 0.3rem;
+  padding: var(--space-4) 0;
+  position: relative;
+  transition: border-color var(--transition-slow);
+}
+
+.diffs-list li:hover {
+  border-bottom-color: var(--color-terracotta);
+}
+
+.diffs-list li::before {
+  background: var(--color-terracotta);
+  content: "";
+  height: 0.5rem;
+  left: -1.1rem;
+  position: absolute;
+  top: 0.6rem;
+  width: 0.5rem;
+}
+
+.diffs-list strong {
+  color: var(--color-primary-dark);
+}
+
+.diffs-list span {
+  color: var(--color-muted);
+}
+
+/* ==========================================================================
+   Profissionais — avatares abstratos que reaproveitam o ícone da própria
+   especialidade em escala maior: diferenciação por composição, não só cor.
+   ========================================================================== */
+
+.professionals-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.professional-card {
   display: grid;
   gap: var(--space-3);
 }
 
-.feature-item {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  display: grid;
-  gap: var(--space-1);
-  padding: var(--space-4);
-}
-
-.feature-item span {
-  color: var(--color-muted);
-}
-
-.avatar {
-  background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.55), transparent 45%),
-    var(--color-primary);
-  border-radius: 44% 56% 48% 52%;
+.professional-card__avatar {
+  align-items: center;
+  border-radius: 46% 54% 52% 48% / 52% 48% 54% 46%;
+  display: inline-flex;
   height: 5.5rem;
+  justify-content: center;
+  transition: transform var(--transition-slow);
   width: 5.5rem;
 }
 
-.avatar--two {
-  background-color: var(--color-accent);
-  border-radius: 57% 43% 55% 45%;
+.professional-card:hover .professional-card__avatar {
+  transform: scale(1.05);
 }
 
-.avatar--three {
-  background-color: var(--color-primary-dark);
-  border-radius: 48% 52% 60% 40%;
+.professional-card__avatar--psicologia {
+  background: color-mix(in srgb, var(--color-primary) 18%, var(--color-bg-alt));
+  color: var(--color-primary-dark);
 }
 
-.profile-card__role {
-  color: var(--color-accent);
+.professional-card__avatar--nutricao {
+  background: color-mix(in srgb, var(--color-terracotta) 20%, var(--color-bg-alt));
+  color: var(--color-terracotta-deep);
+}
+
+.professional-card__avatar--fisioterapia {
+  background: color-mix(in srgb, var(--color-primary-dark) 16%, var(--color-bg-alt));
+  color: var(--color-primary-dark);
+}
+
+.professional-card p {
+  color: var(--color-muted);
+}
+
+.professional-card__role {
+  color: var(--color-terracotta-deep);
   font-weight: 800;
 }
 
-.steps {
-  counter-reset: steps;
+/* ==========================================================================
+   Como funciona — sequência conectada, para não repetir a grade em caixas.
+   ========================================================================== */
+
+.process-flow {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
   list-style: none;
+  position: relative;
 }
 
-.steps li {
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+.process-flow::before {
+  background: var(--color-border-strong);
+  content: "";
+  left: 1.125rem;
+  position: absolute;
+  top: 1.125rem;
+  bottom: 1.125rem;
+  width: 1px;
+}
+
+.process-flow li {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-5);
+  gap: var(--space-3);
+  grid-template-columns: auto 1fr;
+  position: relative;
 }
 
-.steps span {
+.process-flow__index {
   align-items: center;
-  background: var(--color-primary-dark);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-strong);
   border-radius: 999px;
-  color: var(--color-white);
+  color: var(--color-primary-dark);
   display: inline-flex;
   font-weight: 800;
   height: 2.25rem;
   justify-content: center;
+  position: relative;
   width: 2.25rem;
+  z-index: 1;
 }
 
-.experience__text {
+.process-flow strong {
+  color: var(--color-primary-dark);
+  display: block;
+  padding-top: 0.3rem;
+}
+
+.process-flow p {
+  color: var(--color-muted);
+  margin-top: var(--space-1);
+}
+
+/* ==========================================================================
+   Experiência — tratamento editorial (texto grande), distinto das seções
+   com grade ou lista.
+   ========================================================================== */
+
+.experience__inner {
   display: grid;
   gap: var(--space-5);
+  max-width: 46rem;
+}
+
+.experience__statement {
+  color: var(--color-primary-dark);
+  font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem);
+  line-height: 1.3;
+  max-width: 22ch;
+}
+
+.experience__pillars {
+  color: var(--color-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  list-style: none;
+}
+
+.experience__pillars li {
+  font-weight: 750;
+  position: relative;
+}
+
+.experience__pillars li:not(:last-child)::after {
+  color: var(--color-terracotta);
+  content: "·";
+  margin-left: var(--space-5);
+  position: absolute;
+}
+
+.experience__note {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  max-width: 60ch;
+}
+
+/* ==========================================================================
+   Localização
+   ========================================================================== */
+
+.location {
+  display: grid;
+  gap: var(--space-6);
 }
 
 .map-card {
   align-content: center;
   background:
-    linear-gradient(90deg, rgba(47, 81, 70, 0.08) 1px, transparent 1px),
-    linear-gradient(rgba(47, 81, 70, 0.08) 1px, transparent 1px),
-    var(--color-white);
+    linear-gradient(90deg, rgba(44, 64, 56, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(44, 64, 56, 0.08) 1px, transparent 1px),
+    var(--color-surface);
   background-size: 2rem 2rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -584,8 +768,8 @@ address {
 }
 
 .map-card__pin {
-  background: var(--color-accent);
-  border: 0.45rem solid var(--color-white);
+  background: var(--color-terracotta-deep);
+  border: 0.45rem solid var(--color-surface);
   border-radius: 999px 999px 999px 0;
   box-shadow: var(--shadow-card);
   height: 3rem;
@@ -594,12 +778,25 @@ address {
   width: 3rem;
 }
 
-.faq-list {
+.map-card p {
+  color: var(--color-muted);
+}
+
+/* ==========================================================================
+   FAQ — linhas com divisor, sem caixa nem sombra, para variar o ritmo.
+   ========================================================================== */
+
+.faq-layout {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-6);
+}
+
+.faq-list {
+  border-top: 1px solid var(--color-border);
 }
 
 .faq-item {
+  border-bottom: 1px solid var(--color-border);
   overflow: hidden;
 }
 
@@ -609,34 +806,58 @@ address {
   border: 0;
   color: var(--color-primary-dark);
   display: flex;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
   justify-content: space-between;
-  min-height: 3.5rem;
-  padding: var(--space-4);
+  min-height: 3.75rem;
+  padding: var(--space-4) 0;
   text-align: left;
   width: 100%;
 }
 
 .faq-item button::after {
+  color: var(--color-terracotta-deep);
   content: "+";
-  font-size: 1.5rem;
+  flex-shrink: 0;
+  font-size: 1.4rem;
   line-height: 1;
   margin-left: var(--space-4);
+  transition: transform var(--transition);
 }
 
 .faq-item button[aria-expanded="true"]::after {
-  content: "-";
+  content: "+";
+  transform: rotate(45deg);
 }
 
 .faq-item__content {
   color: var(--color-muted);
-  padding: 0 var(--space-4) var(--space-4);
+  padding: 0 0 var(--space-4);
+  max-width: 65ch;
+}
+
+/* ==========================================================================
+   Formulário — a segunda prioridade de CTA da página, depois do hero.
+   ========================================================================== */
+
+.contact {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.contact p {
+  color: var(--color-muted);
 }
 
 .contact-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
   display: grid;
   gap: var(--space-4);
-  padding: var(--space-5);
+  padding: var(--space-6);
 }
 
 .form-field {
@@ -658,7 +879,14 @@ textarea {
   color: var(--color-text);
   min-height: 3rem;
   padding: 0.8rem 0.9rem;
+  transition: border-color var(--transition);
   width: 100%;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--color-primary);
 }
 
 textarea {
@@ -699,15 +927,36 @@ textarea {
   min-height: 1.5rem;
 }
 
+/* ==========================================================================
+   CTA final — transição mais suave a partir da seção anterior, ainda
+   assim um fechamento visualmente forte (fundo escuro sólido).
+   ========================================================================== */
+
 .final-cta {
   background: var(--color-primary-dark);
   color: var(--color-white);
-  padding: var(--space-7) 0;
+  overflow: hidden;
+  padding: var(--space-8) 0;
+  position: relative;
+}
+
+.final-cta__accent {
+  background: color-mix(in srgb, var(--color-terracotta) 55%, transparent);
+  border-radius: 999px;
+  filter: none;
+  height: 10rem;
+  left: 50%;
+  position: absolute;
+  top: -6rem;
+  transform: translateX(-50%);
+  width: 16rem;
+  opacity: 0.16;
 }
 
 .final-cta__inner {
   display: grid;
   gap: var(--space-4);
+  position: relative;
 }
 
 .final-cta h2,
@@ -720,11 +969,19 @@ textarea {
 }
 
 .final-cta .button {
-  background: var(--color-bg);
-  border-color: var(--color-bg);
-  color: var(--color-primary-dark);
+  background: var(--color-terracotta-deep);
+  border-color: var(--color-terracotta-deep);
   justify-self: start;
 }
+
+.final-cta .button:hover {
+  background: var(--color-terracotta);
+  border-color: var(--color-terracotta);
+}
+
+/* ==========================================================================
+   Rodapé
+   ========================================================================== */
 
 .site-footer {
   background: var(--color-text);
@@ -742,12 +999,20 @@ textarea {
   gap: var(--space-2);
 }
 
+.site-footer p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .site-footer a {
   color: var(--color-white);
   min-height: 2.5rem;
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--color-terracotta);
   text-underline-offset: 0.25rem;
 }
+
+/* ==========================================================================
+   Botão flutuante de WhatsApp
+   ========================================================================== */
 
 .floating-whatsapp {
   background: var(--color-primary-dark);
@@ -769,14 +1034,29 @@ textarea {
   background: var(--color-primary);
 }
 
+/* ==========================================================================
+   Responsividade
+   ========================================================================== */
+
 @media (min-width: 640px) {
   .hero__actions .button {
     width: auto;
   }
 
-  .cards-grid,
-  .steps {
+  .specialty-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .professionals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .process-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .process-flow::before {
+    display: none;
   }
 
   .contact-form {
@@ -808,9 +1088,7 @@ textarea {
   .split,
   .location,
   .contact,
-  .experience,
-  .faq-layout,
-  .footer-grid {
+  .faq-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -852,11 +1130,15 @@ textarea {
     grid-template-columns: 1.05fr 0.95fr;
   }
 
-  .cards-grid {
+  .specialty-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .steps {
+  .professionals-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .process-flow {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

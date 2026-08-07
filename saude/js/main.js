@@ -1,6 +1,13 @@
 (function () {
   "use strict";
 
+  // Só entra no estado "oculto antes de revelar" (.js-reveal, ver style.css)
+  // quando o navegador suporta IntersectionObserver — sem isso, o conteúdo
+  // nunca é escondido, então nunca fica permanentemente invisível.
+  if ("IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-reveal");
+  }
+
   // Substitua por um número real no formato internacional, ex.: "5581999999999".
   const WHATSAPP_NUMBER = "";
 
@@ -252,6 +259,37 @@
     }
   }
 
+  // Entrada suave e discreta: observa os elementos .reveal e adiciona
+  // .is-visible quando entram na viewport. Não interfere no menu, no FAQ nem
+  // no formulário — só lê/observa elementos, nunca captura eventos deles.
+  function setupReveal() {
+    if (!("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const elements = document.querySelectorAll(".reveal:not(.is-visible)");
+
+    if (elements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    elements.forEach(function (element) {
+      observer.observe(element);
+    });
+  }
+
   function setupAnchorNavigation() {
     document.querySelectorAll("a[href^='#']:not([data-whatsapp])").forEach(function (link) {
       link.addEventListener("click", function () {
@@ -279,6 +317,7 @@
     setupContactForm();
     setupWhatsAppLinks();
     setupAnchorNavigation();
+    setupReveal();
     updateCurrentYear();
   }
 
