@@ -135,7 +135,7 @@ const isFluxa = !hasScreenshot && slug === "fluxa";
   }
 
   {
-    style === "dashboard" && !isFluxa && (
+    !hasScreenshot && style === "dashboard" && !isFluxa && (
       <div class="preview__body preview__body--dashboard">
         <div class="preview__sidebar">
           <span />
@@ -157,7 +157,7 @@ const isFluxa = !hasScreenshot && slug === "fluxa";
   }
 
   {
-    style === "editorial" && (
+    !hasScreenshot && style === "editorial" && (
       <div class="preview__body preview__body--editorial">
         <span class="preview__monogram" />
         <div class="preview__block preview__block--title" />
@@ -174,7 +174,7 @@ const isFluxa = !hasScreenshot && slug === "fluxa";
   }
 
   {
-    style === "course" && (
+    !hasScreenshot && style === "course" && (
       <div class="preview__body preview__body--course">
         <div class="preview__course-row">
           <div class="preview__course-card"><span /></div>

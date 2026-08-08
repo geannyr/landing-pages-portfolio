@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import { asset } from "./url";
 
 // Convenção de nome: public/images/projects/{slug}-preview.webp. A checagem
@@ -9,8 +9,13 @@ function relativePath(slug: string): string {
   return `images/projects/${slug}-preview.webp`;
 }
 
+// process.cwd() (não import.meta.url) porque o Vite/Astro empacota este
+// módulo em dist/.prerender/chunks/ durante o build — um caminho relativo
+// baseado em import.meta.url resolveria para dentro de dist/, não para a
+// raiz real do projeto. `astro dev`/`build`/`check` sempre rodam com cwd
+// na raiz do repositório (via npm scripts), então isso é estável nos três.
 export function hasProjectScreenshot(slug: string): boolean {
-  const absolutePath = fileURLToPath(new URL(`../../public/${relativePath(slug)}`, import.meta.url));
+  const absolutePath = join(process.cwd(), "public", relativePath(slug));
   return existsSync(absolutePath);
 }
 
