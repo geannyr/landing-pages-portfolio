@@ -58,20 +58,23 @@ export const projects: Project[] = [
     hasDetailPage: true
   },
   {
-    id: "saas-pequenos-negocios",
-    slug: "saas-pequenos-negocios",
-    name: "Plataforma SaaS para pequenos negócios",
+    id: "fluxa",
+    slug: "fluxa",
+    name: "Fluxa",
     category: "vanilla",
     segment: "Vendas e tecnologia",
-    status: "planned",
+    status: "completed",
     stack: ["HTML", "CSS", "JavaScript"],
-    goal: "Conversão de teste gratuito para plano pago",
-    description: "Landing page fictícia para uma ferramenta de gestão voltada a pequenos negócios.",
-    highlights: ["Planos e preços", "Depoimentos", "Cadastro/trial"],
+    goal: "Organizar oportunidades comerciais e converter visitantes para um teste gratuito",
+    description:
+      "Landing page de um CRM fictício e enxuto para pequenos negócios, com pipeline de vendas, organização de clientes e foco em teste gratuito.",
+    highlights: ["Pipeline de vendas", "Clientes e tarefas", "Teste grátis"],
     accent: "#4C5FD7",
     previewStyle: "dashboard",
+    demoPath: "saas",
+    codeUrl: "https://github.com/geannyr/landing-pages-portfolio/tree/main/saas",
     year: 2026,
-    hasDetailPage: false
+    hasDetailPage: true
   },
   {
     id: "consultoria-empresarial",

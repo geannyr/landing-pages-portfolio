@@ -22,10 +22,14 @@ const screenshotUrl = hasScreenshot && slug ? projectScreenshotUrl(slug) : undef
 // abstrato genérico, recebe uma composição própria inspirada na landing real
 // (saude/) enquanto não houver uma captura de tela de verdade.
 const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
+// Fluxa também recebe uma composição própria enquanto não houver screenshot
+// real: pipeline de vendas em miniatura (a assinatura visual aprovada da
+// landing), em vez do fallback abstrato genérico de "dashboard".
+const isFluxa = !hasScreenshot && slug === "fluxa";
 ---
 
 <div
-  class:list={["preview", { "preview--clinica": isClinicaPlena }]}
+  class:list={["preview", { "preview--clinica": isClinicaPlena, "preview--fluxa": isFluxa }]}
   style={`--accent: ${accent};`}
   aria-hidden={hasScreenshot ? undefined : "true"}
   transition:name={transitionName}
@@ -41,7 +45,7 @@ const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
         loading="lazy"
         decoding="async"
       />
-    ) : !isClinicaPlena ? (
+    ) : !isClinicaPlena && !isFluxa ? (
       <>
         <div class="preview__texture" aria-hidden="true" />
         <span class="preview__window" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -80,7 +84,36 @@ const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
   }
 
   {
-    !hasScreenshot && !isClinicaPlena && style === "screenshot" && (
+    isFluxa && (
+      <div class="preview__body preview__body--fluxa">
+        <div class="fx-topbar">
+          <span class="fx-mark">F</span>
+          <span class="fx-brand">Fluxa</span>
+        </div>
+        <div class="fx-pipeline">
+          <div class="fx-col">
+            <span class="fx-col-title">Novo</span>
+            <span class="fx-card" />
+          </div>
+          <div class="fx-col">
+            <span class="fx-col-title">Conversa</span>
+            <span class="fx-card" />
+          </div>
+          <div class="fx-col">
+            <span class="fx-col-title">Proposta</span>
+            <span class="fx-card" />
+          </div>
+          <div class="fx-col">
+            <span class="fx-col-title">Fechado</span>
+            <span class="fx-card fx-card--won" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    !hasScreenshot && !isClinicaPlena && !isFluxa && style === "screenshot" && (
       <div class="preview__body preview__body--screenshot">
         <div class="preview__site-bar">
           <span class="preview__site-mark" />
@@ -102,7 +135,7 @@ const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
   }
 
   {
-    style === "dashboard" && (
+    style === "dashboard" && !isFluxa && (
       <div class="preview__body preview__body--dashboard">
         <div class="preview__sidebar">
           <span />
@@ -673,5 +706,99 @@ const isClinicaPlena = !hasScreenshot && slug === "clinica-plena";
     .preview--clinica:hover .cp-panel__blob-sage {
       transform: none;
     }
+  }
+
+  /* Fluxa — interpretação visual (não importada de saas/) da identidade
+     aprovada da landing: off-white/grafite com acento índigo, sem serif e
+     sem formas orgânicas. O pipeline de vendas é a assinatura visual, então
+     é o que este preview reproduz em miniatura — não um dashboard genérico. */
+  .preview--fluxa {
+    --fx-bg: #f6f7fc;
+    --fx-bg-alt: #ececf6;
+    --fx-indigo: #4c5fd7;
+    --fx-indigo-dark: #333f9e;
+    --fx-ink: #14172b;
+    --fx-muted: #5b5f76;
+    --fx-positive: #007656;
+    --fx-positive-soft: #dcf3ec;
+    background: linear-gradient(160deg, var(--fx-bg) 0%, var(--fx-bg-alt) 100%);
+    border-bottom-color: color-mix(in srgb, var(--fx-indigo) 30%, var(--color-border));
+    container-type: inline-size;
+  }
+
+  .preview__body--fluxa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: var(--space-3);
+  }
+
+  .fx-topbar {
+    align-items: center;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .fx-mark {
+    align-items: center;
+    background: var(--fx-indigo);
+    border-radius: 0.2rem;
+    color: #fff;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.5rem;
+    font-weight: 800;
+    height: 0.95rem;
+    justify-content: center;
+    width: 0.95rem;
+  }
+
+  .fx-brand {
+    color: var(--fx-ink);
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .fx-pipeline {
+    display: grid;
+    flex: 1;
+    gap: 0.4rem;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 0;
+  }
+
+  .fx-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .fx-col-title {
+    color: var(--fx-muted);
+    font-size: clamp(0.34rem, 2.6cqi, 0.42rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .fx-card {
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--fx-indigo-dark) 12%, transparent);
+    border-radius: 0.2rem;
+    box-shadow: 0 0.2rem 0.4rem rgba(20, 23, 43, 0.06);
+    display: block;
+    flex: 1;
+    min-height: 0.9rem;
+  }
+
+  .fx-card--won {
+    background: var(--fx-positive-soft);
+    border-color: transparent;
+    border-bottom: 2px solid var(--fx-positive);
   }
 </style>

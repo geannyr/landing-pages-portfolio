@@ -1,0 +1,1275 @@
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-ink);
+  font-family: var(--font-heading);
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+  margin: 0;
+}
+
+/* Pesos reduzidos de propósito — títulos fortes, não "tudo em negrito". */
+h1 {
+  font-size: clamp(2rem, 2vw + 1.5rem, 3rem);
+  font-weight: 700;
+  max-width: 16ch;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.1vw + 1.2rem, 2rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+p {
+  margin: 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding: 0 var(--space-5);
+  width: 100%;
+}
+
+/* Ritmo "mensagem" por padrão — seções com produto (pipeline, clientes)
+   recebem padding mais denso via seletor de id, ver abaixo. */
+.section {
+  padding: var(--space-8) 0;
+}
+
+.section--tint {
+  background: var(--color-bg-alt);
+}
+
+.section-kicker {
+  color: var(--color-primary-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  max-width: 58ch;
+}
+
+.section-lead {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  margin-top: var(--space-1);
+}
+
+.skip-link {
+  background: var(--color-ink-deep);
+  border-radius: 0 0 var(--radius-sm) 0;
+  color: var(--color-white);
+  left: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  position: fixed;
+  top: 0;
+  transform: translateY(-120%);
+  transition: transform var(--transition);
+  z-index: 50;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.sr-only {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary-dark);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Entrada suave ao rolar (reveal).
+   ========================================================================== */
+
+.reveal {
+  transition: opacity 460ms ease, transform 460ms ease;
+}
+
+.js-reveal .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none !important;
+  }
+
+  .js-reveal .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   Botões e link editorial — um CTA sólido forte; o resto é link, não
+   repetição de botão preenchido + outline em toda seção.
+   ========================================================================== */
+
+.button {
+  align-items: center;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  gap: var(--space-2);
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.button:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button--secondary {
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-ink);
+}
+
+.button--secondary:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+}
+
+.button--small {
+  font-size: 0.8125rem;
+  padding: 0.55rem 0.95rem;
+}
+
+.link-editorial {
+  align-items: center;
+  color: var(--color-ink);
+  display: inline-flex;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  gap: 0.4rem;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-strong);
+  text-underline-offset: 0.28rem;
+  transition: text-decoration-color var(--transition);
+}
+
+.link-editorial:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ==========================================================================
+   Cabeçalho
+   ========================================================================== */
+
+.site-header {
+  background: rgba(247, 247, 251, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+  height: var(--header-height);
+  justify-content: space-between;
+}
+
+.brand {
+  align-items: center;
+  color: var(--color-ink);
+  display: inline-flex;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  gap: var(--space-2);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.brand__mark {
+  align-items: center;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  height: 1.75rem;
+  justify-content: center;
+  width: 1.75rem;
+}
+
+.nav-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nav-toggle__icon,
+.nav-toggle__icon::before,
+.nav-toggle__icon::after {
+  background: var(--color-ink);
+  border-radius: 2px;
+  content: "";
+  display: block;
+  height: 2px;
+  position: absolute;
+  transition: transform var(--transition), opacity var(--transition);
+  width: 1.1rem;
+}
+
+.nav-toggle__icon::before {
+  transform: translateY(-6px);
+}
+
+.nav-toggle__icon::after {
+  transform: translateY(6px);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon {
+  background: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::before {
+  transform: rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::after {
+  transform: rotate(-45deg);
+}
+
+.site-nav {
+  align-items: center;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  left: 0;
+  padding: var(--space-6) var(--space-5);
+  position: absolute;
+  right: 0;
+  top: var(--header-height);
+  transform: translateY(-8px);
+  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.site-nav.is-open {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
+.site-nav a {
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Avatar — chip de iniciais, dá identidade/hierarquia aos cards de produto
+   sem depender só de texto.
+   ========================================================================== */
+
+.avatar {
+  align-items: center;
+  background: color-mix(in srgb, var(--avatar-color, var(--color-primary)) 20%, white);
+  border-radius: 999px;
+  /* Mistura leve de cor sobre preto (não o inverso) — garante AA em todas as
+     cores de avatar usadas; testado no par mais claro (~10.6:1, folga ampla). */
+  color: color-mix(in srgb, var(--avatar-color, var(--color-primary)) 30%, black);
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}
+
+.avatar--sm {
+  font-size: 0.625rem;
+  height: 1.6rem;
+  width: 1.6rem;
+}
+
+/* ==========================================================================
+   Hero — faixa escura autoral, headline assimétrica; a interface entra em
+   camada, parcialmente sobreposta, na seção seguinte (.hero-bleed).
+   ========================================================================== */
+
+.hero {
+  background: var(--color-ink-deep);
+  color: var(--color-on-dark);
+  overflow: hidden;
+  /* O padding inferior é sempre um pouco maior que o overlap de
+     .hero-bleed (ver comentário lá) — sobra uma faixa escura fina entre o
+     CTA e o painel, para os dois não parecerem colados um no outro. O
+     padding superior é só respiro sob o header fixo, livre por breakpoint. */
+  padding: 3rem 0 2.5rem;
+  position: relative;
+}
+
+.hero-glow {
+  aspect-ratio: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 55%, transparent) 0%, transparent 70%);
+  filter: blur(70px);
+  pointer-events: none;
+  position: absolute;
+  right: -12%;
+  top: -30%;
+  width: 55%;
+}
+
+.hero-message {
+  max-width: 34rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-kicker {
+  align-items: center;
+  color: var(--color-on-dark-muted);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.4rem;
+  letter-spacing: 0.07em;
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+
+.hero-kicker__dot {
+  background: var(--color-primary);
+  border-radius: 50%;
+  display: inline-block;
+  height: 0.4rem;
+  width: 0.4rem;
+}
+
+.hero-message h1 {
+  color: var(--color-on-dark);
+}
+
+.hero-lead {
+  color: var(--color-on-dark-muted);
+  font-size: 1.0625rem;
+  margin-top: var(--space-4);
+  max-width: 40ch;
+}
+
+.hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.hero-actions .link-editorial {
+  color: var(--color-on-dark);
+  text-decoration-color: var(--color-border-on-dark);
+}
+
+.hero-actions .link-editorial:hover {
+  text-decoration-color: var(--color-on-dark);
+}
+
+.hero-bleed {
+  /* Sempre um pouco menor que o padding-bottom de .hero em cada breakpoint
+     (ver media queries) — overlap generoso, mas com uma folga fina visível
+     entre o CTA e o painel, para não parecerem colados. */
+  margin-top: -1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+  padding: var(--space-5);
+  position: relative;
+}
+
+.hero-panel__label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+
+.hero-panel__board {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.hero-panel__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.hero-panel__col-title {
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.hero-card {
+  align-items: center;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.hero-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.hero-card__body strong {
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero-card__body span {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.hero-card--quiet {
+  background: transparent;
+  border: 1px dashed var(--color-border-strong);
+}
+
+.hero-card--won {
+  background: var(--color-positive-soft);
+}
+
+.hero-card__won {
+  color: var(--color-positive);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Problema — narrativa em três linhas assimétricas, cada dor ligada a um
+   fragmento da interface. Sem tabela comparativa.
+   ========================================================================== */
+
+#problema {
+  /* Um pouco menor que o padding padrão de .section, mas com respiro
+     suficiente para o eyebrow "O problema" não parecer colado na sombra do
+     painel sobreposto. */
+  padding-top: 3.25rem;
+}
+
+.problem-intro {
+  margin-bottom: var(--space-7);
+  max-width: 46ch;
+}
+
+.problem-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.problem-row {
+  align-items: center;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.problem-row__index {
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.problem-row__text h3 {
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+.problem-row__text p {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  max-width: 40ch;
+}
+
+.problem-row__visual {
+  display: flex;
+}
+
+.mini-card {
+  align-items: center;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  gap: var(--space-3);
+  max-width: 20rem;
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.mini-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.mini-card__body strong {
+  font-size: 0.875rem;
+}
+
+.mini-card__body span {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.mini-stages {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: 20rem;
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.mini-stages span {
+  align-items: center;
+  background: var(--color-bg-alt);
+  border-radius: 999px;
+  color: var(--color-muted);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+}
+
+.mini-stages b {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.mini-stages .is-won {
+  background: var(--color-positive-soft);
+  color: var(--color-positive);
+}
+
+.mini-stages .is-won b {
+  color: var(--color-positive);
+}
+
+/* ==========================================================================
+   Como funciona — números-fantasma grandes, espaçamento generoso (ritmo
+   "mensagem"), sem bordas.
+   ========================================================================== */
+
+.steps-row {
+  display: grid;
+  gap: var(--space-7);
+  grid-template-columns: 1fr;
+  list-style: none;
+}
+
+.steps-row__num {
+  color: var(--color-primary);
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-2);
+  /* 0.4 lia como "quebrado" (~1.7:1); 0.78 preserva o efeito "número-fantasma"
+     e ainda passa AA large-text (>=3:1) contra --color-bg-alt. */
+  opacity: 0.78;
+}
+
+.steps-row h3 {
+  margin-bottom: var(--space-1);
+}
+
+.steps-row p {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  max-width: 32ch;
+}
+
+/* ==========================================================================
+   Pipeline (produto) — cards com sombra suave, avatar e hierarquia; abas
+   leves em vez de barra de ferramentas administrativa.
+   ========================================================================== */
+
+#pipeline {
+  padding: var(--space-7) 0;
+}
+
+.pipeline {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+.pipeline__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pipeline__col-header {
+  align-items: center;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  display: flex;
+  font-weight: 700;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-1) var(--space-3);
+  text-align: left;
+  transition: border-color var(--transition), color var(--transition);
+  width: 100%;
+}
+
+.pipeline__col-header[aria-pressed="true"] {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-ink);
+}
+
+.pipeline__col-title {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pipeline__col-count {
+  background: var(--color-bg-alt);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.1rem 0.55rem;
+}
+
+.pipeline__col-header[aria-pressed="true"] .pipeline__col-count {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.pipeline__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.pipeline-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  transition: box-shadow var(--transition);
+}
+
+.pipeline__col:has(.pipeline__col-header[aria-pressed="true"]) .pipeline-card {
+  box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-card);
+}
+
+.pipeline-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.pipeline-card__body strong {
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.pipeline-card__value {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.pipeline-card__next {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.pipeline-card--won {
+  background: var(--color-positive-soft);
+}
+
+.pipeline-card--won .pipeline-card__value {
+  color: var(--color-positive);
+}
+
+/* ==========================================================================
+   Clientes e tarefas — dois cartões de produto reais, levemente sobrepostos.
+   ========================================================================== */
+
+#clientes {
+  padding: var(--space-7) 0;
+}
+
+.clients-layout {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.clients-intro {
+  max-width: 44ch;
+}
+
+.clients-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.entity-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+}
+
+.entity-card--client {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.entity-card__head {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.entity-card__head strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.entity-card__head span {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.entity-card__value {
+  color: var(--color-ink);
+  flex-shrink: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.entity-card__label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.task-list li {
+  color: var(--color-text);
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.task-list li::before {
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.25rem;
+  content: "";
+  height: 0.85rem;
+  left: 0;
+  position: absolute;
+  top: 0.15rem;
+  width: 0.85rem;
+}
+
+.task-list li.is-done {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+.task-list li.is-done::before {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Planos — dois cartões reais (o plano é uma entidade), profundidade por
+   sombra e leve tint no destaque, não por borda pesada.
+   ========================================================================== */
+
+.plans {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.plan-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  position: relative;
+}
+
+.plan-card--highlight {
+  background: var(--color-surface-tint);
+  box-shadow: var(--shadow-panel);
+}
+
+.plan-card__badge {
+  background: var(--color-primary);
+  border-radius: 999px;
+  color: var(--color-white);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  left: var(--space-6);
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.7rem;
+  position: absolute;
+  text-transform: uppercase;
+  top: -0.7rem;
+}
+
+.plan-card__price {
+  align-items: baseline;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.plan-card__price span {
+  color: var(--color-ink);
+  font-size: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.plan-card__price small {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.plan-card__note {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.plan-card__list {
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9375rem;
+  gap: var(--space-2);
+  list-style: none;
+  margin: var(--space-2) 0;
+}
+
+.plan-card__list li {
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.plan-card__list li::before {
+  color: var(--color-primary);
+  content: "✓";
+  font-weight: 700;
+  left: 0;
+  position: absolute;
+}
+
+.plan-card .button {
+  margin-top: auto;
+}
+
+/* ==========================================================================
+   Objeções — lista editorial com linhas finas, sem cartão externo.
+   ========================================================================== */
+
+.objections-layout {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.objections-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.objection-item + .objection-item {
+  border-top: 1px solid var(--color-border);
+}
+
+.objection-item button {
+  background: transparent;
+  border: none;
+  color: var(--color-ink);
+  display: flex;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-1);
+  text-align: left;
+  width: 100%;
+}
+
+.objection-item button::after {
+  color: var(--color-primary);
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-left: var(--space-3);
+  transition: transform var(--transition);
+}
+
+.objection-item button[aria-expanded="true"]::after {
+  transform: rotate(45deg);
+}
+
+.objection-item__content {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  max-width: 62ch;
+  padding: 0 var(--space-1) var(--space-4);
+}
+
+/* ==========================================================================
+   Teste grátis — painel assimétrico.
+   ========================================================================== */
+
+.trial-split {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.trial-intro {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40ch;
+}
+
+.trial-form {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  padding: var(--space-6);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  color: var(--color-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.form-field input {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  padding: 0.7rem 0.85rem;
+}
+
+.form-field input:focus-visible {
+  outline: 3px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: 0.8125rem;
+  min-height: 1.1em;
+}
+
+.form-status {
+  color: var(--color-primary-dark);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  min-height: 1.2em;
+}
+
+/* ==========================================================================
+   Rodapé — mesmo tom escuro do hero, para fechar a moldura da página.
+   ========================================================================== */
+
+.site-footer {
+  background: var(--color-ink-deep);
+  color: var(--color-on-dark-muted);
+  padding: var(--space-7) 0;
+}
+
+.footer-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.footer-grid strong {
+  color: var(--color-on-dark);
+  display: block;
+  font-size: 1.0625rem;
+  margin-bottom: var(--space-2);
+}
+
+.footer-grid p {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.footer-grid nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.footer-grid nav a {
+  color: var(--color-on-dark-muted);
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.footer-grid nav a:hover {
+  color: var(--color-on-dark);
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .trial-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 640px) {
+  .hero-panel__board {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pipeline {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .plans {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .clients-stack {
+    position: relative;
+  }
+
+  .entity-card--tasks {
+    margin-left: 2.25rem;
+    margin-top: -1.25rem;
+    max-width: 24rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding-bottom: 3.25rem;
+    padding-top: 3.5rem;
+  }
+
+  .hero-bleed {
+    margin-top: -2.25rem;
+  }
+
+  .problem-row {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .problem-row__visual {
+    justify-content: flex-end;
+  }
+
+  .problem-row--reverse .problem-row__text {
+    order: 2;
+  }
+
+  .problem-row--reverse .problem-row__visual {
+    justify-content: flex-start;
+    order: 1;
+  }
+
+  .steps-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .clients-layout {
+    align-items: center;
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+
+  .trial-split {
+    align-items: start;
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+
+  .trial-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.2fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-toggle {
+    display: none;
+  }
+
+  .site-nav {
+    background: transparent;
+    border: none;
+    flex-direction: row;
+    gap: var(--space-6);
+    opacity: 1;
+    padding: 0;
+    position: static;
+    transform: none;
+    visibility: visible;
+  }
+
+  .hero {
+    padding-bottom: 4.5rem;
+    padding-top: 5rem;
+  }
+
+  .hero-bleed {
+    /* Pull maior no desktop (o pipeline "nasce" do hero de forma mais
+       intencional), um pouco menor que o padding-bottom acima — nunca cobre
+       o CTA e deixa uma folga fina visível entre botão e painel. */
+    margin-top: -3.5rem;
+  }
+
+  .pipeline {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
